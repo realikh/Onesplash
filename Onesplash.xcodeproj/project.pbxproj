@@ -3,29 +3,37 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		651F8D09FD190DFE7130107A /* Pods_Onesplash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09B8999C3B0ABBC8BBEC808F /* Pods_Onesplash.framework */; };
 		774AC74725BA1D4B002B689F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 774AC74625BA1D4B002B689F /* AppDelegate.swift */; };
 		774AC74925BA1D4B002B689F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 774AC74825BA1D4B002B689F /* SceneDelegate.swift */; };
-		774AC74B25BA1D4B002B689F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 774AC74A25BA1D4B002B689F /* ViewController.swift */; };
-		774AC74E25BA1D4B002B689F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 774AC74C25BA1D4B002B689F /* Main.storyboard */; };
+		774AC74B25BA1D4B002B689F /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 774AC74A25BA1D4B002B689F /* HomeViewController.swift */; };
 		774AC75125BA1D4B002B689F /* Onesplash.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 774AC74F25BA1D4B002B689F /* Onesplash.xcdatamodeld */; };
 		774AC75325BA1D4F002B689F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 774AC75225BA1D4F002B689F /* Assets.xcassets */; };
 		774AC75625BA1D4F002B689F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 774AC75425BA1D4F002B689F /* LaunchScreen.storyboard */; };
+		774AF88225C149E800359B3F /* PostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 774AF88125C149E800359B3F /* PostService.swift */; };
+		77A74DD225BB23EC002D8C1E /* ImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A74DD125BB23EC002D8C1E /* ImageTableViewCell.swift */; };
+		77E0D5E625BB15690053C7A8 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E0D5E525BB15690053C7A8 /* Post.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		09B8999C3B0ABBC8BBEC808F /* Pods_Onesplash.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Onesplash.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		774AC74325BA1D4B002B689F /* Onesplash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Onesplash.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		774AC74625BA1D4B002B689F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		774AC74825BA1D4B002B689F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		774AC74A25BA1D4B002B689F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		774AC74D25BA1D4B002B689F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		774AC74A25BA1D4B002B689F /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		774AC75025BA1D4B002B689F /* Onesplash.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Onesplash.xcdatamodel; sourceTree = "<group>"; };
 		774AC75225BA1D4F002B689F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		774AC75525BA1D4F002B689F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		774AC75725BA1D4F002B689F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		774AF88125C149E800359B3F /* PostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostService.swift; sourceTree = "<group>"; };
+		77A74DD125BB23EC002D8C1E /* ImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTableViewCell.swift; sourceTree = "<group>"; };
+		77E0D5E525BB15690053C7A8 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		873E1B43992A3006AB4AED55 /* Pods-Onesplash.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Onesplash.release.xcconfig"; path = "Target Support Files/Pods-Onesplash/Pods-Onesplash.release.xcconfig"; sourceTree = "<group>"; };
+		CEE01C462177F6FCD46322EB /* Pods-Onesplash.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Onesplash.debug.xcconfig"; path = "Target Support Files/Pods-Onesplash/Pods-Onesplash.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,17 +41,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				651F8D09FD190DFE7130107A /* Pods_Onesplash.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		208E7D7D444A763B9E9F66BA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				09B8999C3B0ABBC8BBEC808F /* Pods_Onesplash.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		774AC73A25BA1D4B002B689F = {
 			isa = PBXGroup;
 			children = (
 				774AC74525BA1D4B002B689F /* Onesplash */,
 				774AC74425BA1D4B002B689F /* Products */,
+				8B7E71C4F25C2A3A69CE245E /* Pods */,
+				208E7D7D444A763B9E9F66BA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -60,14 +79,25 @@
 			children = (
 				774AC74625BA1D4B002B689F /* AppDelegate.swift */,
 				774AC74825BA1D4B002B689F /* SceneDelegate.swift */,
-				774AC74A25BA1D4B002B689F /* ViewController.swift */,
-				774AC74C25BA1D4B002B689F /* Main.storyboard */,
+				774AF88125C149E800359B3F /* PostService.swift */,
+				774AC74A25BA1D4B002B689F /* HomeViewController.swift */,
+				77A74DD125BB23EC002D8C1E /* ImageTableViewCell.swift */,
+				77E0D5E525BB15690053C7A8 /* Post.swift */,
 				774AC75225BA1D4F002B689F /* Assets.xcassets */,
 				774AC75425BA1D4F002B689F /* LaunchScreen.storyboard */,
 				774AC75725BA1D4F002B689F /* Info.plist */,
 				774AC74F25BA1D4B002B689F /* Onesplash.xcdatamodeld */,
 			);
 			path = Onesplash;
+			sourceTree = "<group>";
+		};
+		8B7E71C4F25C2A3A69CE245E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				CEE01C462177F6FCD46322EB /* Pods-Onesplash.debug.xcconfig */,
+				873E1B43992A3006AB4AED55 /* Pods-Onesplash.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -77,9 +107,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 774AC75A25BA1D4F002B689F /* Build configuration list for PBXNativeTarget "Onesplash" */;
 			buildPhases = (
+				977A88066E1D7A400B81F0EE /* [CP] Check Pods Manifest.lock */,
 				774AC73F25BA1D4B002B689F /* Sources */,
 				774AC74025BA1D4B002B689F /* Frameworks */,
 				774AC74125BA1D4B002B689F /* Resources */,
+				ADA9FEAF3A4FBCBA1CF0F3F3 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -129,35 +161,71 @@
 			files = (
 				774AC75625BA1D4F002B689F /* LaunchScreen.storyboard in Resources */,
 				774AC75325BA1D4F002B689F /* Assets.xcassets in Resources */,
-				774AC74E25BA1D4B002B689F /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		977A88066E1D7A400B81F0EE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Onesplash-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		ADA9FEAF3A4FBCBA1CF0F3F3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Onesplash/Pods-Onesplash-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Onesplash/Pods-Onesplash-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Onesplash/Pods-Onesplash-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		774AC73F25BA1D4B002B689F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				774AC74B25BA1D4B002B689F /* ViewController.swift in Sources */,
+				774AC74B25BA1D4B002B689F /* HomeViewController.swift in Sources */,
 				774AC74725BA1D4B002B689F /* AppDelegate.swift in Sources */,
+				774AF88225C149E800359B3F /* PostService.swift in Sources */,
 				774AC74925BA1D4B002B689F /* SceneDelegate.swift in Sources */,
+				77A74DD225BB23EC002D8C1E /* ImageTableViewCell.swift in Sources */,
 				774AC75125BA1D4B002B689F /* Onesplash.xcdatamodeld in Sources */,
+				77E0D5E625BB15690053C7A8 /* Post.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		774AC74C25BA1D4B002B689F /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				774AC74D25BA1D4B002B689F /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		774AC75425BA1D4F002B689F /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -287,6 +355,7 @@
 		};
 		774AC75B25BA1D4F002B689F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CEE01C462177F6FCD46322EB /* Pods-Onesplash.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -306,6 +375,7 @@
 		};
 		774AC75C25BA1D4F002B689F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 873E1B43992A3006AB4AED55 /* Pods-Onesplash.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
