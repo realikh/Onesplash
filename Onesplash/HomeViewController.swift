@@ -9,11 +9,6 @@ import SnapKit
 
 class HomeViewController: UIViewController {
     
-    private let tableView: UITableView = {
-        let tableView = UITableView()
-        return tableView
-    }()
-    
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.dataSource = self
