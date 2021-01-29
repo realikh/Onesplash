@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		651F8D09FD190DFE7130107A /* Pods_Onesplash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09B8999C3B0ABBC8BBEC808F /* Pods_Onesplash.framework */; };
+		68CA866825C41ADB00192321 /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CA866725C41ADB00192321 /* CustomCollectionViewCell.swift */; };
 		774AC74725BA1D4B002B689F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 774AC74625BA1D4B002B689F /* AppDelegate.swift */; };
 		774AC74925BA1D4B002B689F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 774AC74825BA1D4B002B689F /* SceneDelegate.swift */; };
 		774AC74B25BA1D4B002B689F /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 774AC74A25BA1D4B002B689F /* HomeViewController.swift */; };
@@ -15,12 +16,12 @@
 		774AC75325BA1D4F002B689F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 774AC75225BA1D4F002B689F /* Assets.xcassets */; };
 		774AC75625BA1D4F002B689F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 774AC75425BA1D4F002B689F /* LaunchScreen.storyboard */; };
 		774AF88225C149E800359B3F /* PostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 774AF88125C149E800359B3F /* PostService.swift */; };
-		77A74DD225BB23EC002D8C1E /* ImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A74DD125BB23EC002D8C1E /* ImageTableViewCell.swift */; };
 		77E0D5E625BB15690053C7A8 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E0D5E525BB15690053C7A8 /* Post.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		09B8999C3B0ABBC8BBEC808F /* Pods_Onesplash.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Onesplash.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		68CA866725C41ADB00192321 /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
 		774AC74325BA1D4B002B689F /* Onesplash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Onesplash.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		774AC74625BA1D4B002B689F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		774AC74825BA1D4B002B689F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -30,7 +31,6 @@
 		774AC75525BA1D4F002B689F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		774AC75725BA1D4F002B689F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		774AF88125C149E800359B3F /* PostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostService.swift; sourceTree = "<group>"; };
-		77A74DD125BB23EC002D8C1E /* ImageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageTableViewCell.swift; sourceTree = "<group>"; };
 		77E0D5E525BB15690053C7A8 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		873E1B43992A3006AB4AED55 /* Pods-Onesplash.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Onesplash.release.xcconfig"; path = "Target Support Files/Pods-Onesplash/Pods-Onesplash.release.xcconfig"; sourceTree = "<group>"; };
 		CEE01C462177F6FCD46322EB /* Pods-Onesplash.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Onesplash.debug.xcconfig"; path = "Target Support Files/Pods-Onesplash/Pods-Onesplash.debug.xcconfig"; sourceTree = "<group>"; };
@@ -81,7 +81,7 @@
 				774AC74825BA1D4B002B689F /* SceneDelegate.swift */,
 				774AF88125C149E800359B3F /* PostService.swift */,
 				774AC74A25BA1D4B002B689F /* HomeViewController.swift */,
-				77A74DD125BB23EC002D8C1E /* ImageTableViewCell.swift */,
+				68CA866725C41ADB00192321 /* CustomCollectionViewCell.swift */,
 				77E0D5E525BB15690053C7A8 /* Post.swift */,
 				774AC75225BA1D4F002B689F /* Assets.xcassets */,
 				774AC75425BA1D4F002B689F /* LaunchScreen.storyboard */,
@@ -216,8 +216,8 @@
 				774AC74B25BA1D4B002B689F /* HomeViewController.swift in Sources */,
 				774AC74725BA1D4B002B689F /* AppDelegate.swift in Sources */,
 				774AF88225C149E800359B3F /* PostService.swift in Sources */,
+				68CA866825C41ADB00192321 /* CustomCollectionViewCell.swift in Sources */,
 				774AC74925BA1D4B002B689F /* SceneDelegate.swift in Sources */,
-				77A74DD225BB23EC002D8C1E /* ImageTableViewCell.swift in Sources */,
 				774AC75125BA1D4B002B689F /* Onesplash.xcdatamodeld in Sources */,
 				77E0D5E625BB15690053C7A8 /* Post.swift in Sources */,
 			);
