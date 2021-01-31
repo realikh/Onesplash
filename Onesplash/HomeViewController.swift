@@ -89,6 +89,13 @@ extension HomeViewController: UICollectionViewDataSource {
             DispatchQueue.main.async {
                 cell.cellImageView.image = img
                 cell.userNameLabel.text = post.user.name
+                
+                // Gradient layer for readability of the user names (especially when there's white image on the background)
+                let gradient = CAGradientLayer()
+                gradient.frame = cell.cellImageView.bounds
+                gradient.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
+                gradient.locations = [0.1, 1]
+                cell.cellImageView.layer.mask = gradient
             }
         }
         return cell
