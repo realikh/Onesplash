@@ -9,6 +9,14 @@ import SnapKit
 
 class HomeViewController: UIViewController {
     
+    private var images = [UIImage]()
+    
+    private let searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.barStyle = .black
+        return searchBar
+    }()
+    
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.dataSource = self
@@ -32,22 +40,34 @@ class HomeViewController: UIViewController {
     
     // MARK: Layout
     private func layoutUI() {
+        configureSearchBar()
         configureCollectionView()
+    }
+    
+    private func configureSearchBar() {
+        searchBar.delegate = self
+        view.addSubview(searchBar)
+        searchBar.snp.makeConstraints {
+            $0.left.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.right.equalToSuperview()
+            $0.height.equalTo(44)
+        }
     }
     
     private func configureCollectionView() {
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.left.equalToSuperview()
+            $0.top.equalTo(searchBar.snp.bottom)
+            $0.right.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+//            $0.edges.equalToSuperview()
         }
     }
     
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        layoutUI()
-        
-        postService.posts(query: "cartoon") { [weak self] posts, error in
+    private func requestPosts(with query: String) {
+        postService.posts(query: query) { [weak self] posts, error in
             if let error = error {
                 print(error.localizedDescription)
                 return
@@ -59,10 +79,14 @@ class HomeViewController: UIViewController {
             }
         }
     }
-}
-
-extension HomeViewController: UICollectionViewDelegate {
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        layoutUI()
+        
+        // "cats" is just a placeholder-query for temporary demonstrative purposes
+        requestPosts(with: "cats")
+    }
 }
 
 extension HomeViewController: UICollectionViewDataSource {
@@ -84,8 +108,8 @@ extension HomeViewController: UICollectionViewDataSource {
         }
         
         postService.image(post: post) { [weak self] data, error  in
-            let img = image(data: data)
-            
+            guard let img = image(data: data) else { return }
+            self?.images.append(img)
             DispatchQueue.main.async {
                 cell.cellImageView.image = img
                 cell.userNameLabel.text = post.user.name
@@ -102,8 +126,16 @@ extension HomeViewController: UICollectionViewDataSource {
 }
 
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView      (_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let post = posts[indexPath.row]
         return CGSize(width: view.frame.width, height: CGFloat(350 * (post.height/post.width)))
     }
+}
+
+extension HomeViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        requestPosts(with: searchBar.text!)
+    }
+    
+    //TODO: Hide the keyboard
 }
