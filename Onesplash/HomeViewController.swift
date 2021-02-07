@@ -13,7 +13,6 @@ class HomeViewController: UIViewController {
     
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.barStyle = .black
         return searchBar
     }()
     
@@ -46,28 +45,43 @@ class HomeViewController: UIViewController {
     
     private func configureSearchBar() {
         searchBar.delegate = self
-        view.addSubview(searchBar)
-        searchBar.snp.makeConstraints {
-            $0.left.equalToSuperview()
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.right.equalToSuperview()
-            $0.height.equalTo(44)
-        }
+        navigationItem.titleView = searchBar
+//        view.addSubview(searchBar)
+//        searchBar.snp.makeConstraints {
+//            $0.left.equalToSuperview()
+//            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+//            $0.right.equalToSuperview()
+//            $0.height.equalTo(44)
+//        }
     }
     
     private func configureCollectionView() {
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints {
-            $0.left.equalToSuperview()
-            $0.top.equalTo(searchBar.snp.bottom)
-            $0.right.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-//            $0.edges.equalToSuperview()
+//            $0.left.equalToSuperview()
+//            $0.top.equalTo(searchBar.snp.bottom)
+//            $0.right.equalToSuperview()
+//            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            $0.edges.equalToSuperview()
         }
     }
     
-    private func requestPosts(with query: String) {
-        postService.posts(query: query) { [weak self] posts, error in
+    private func fetchPosts() {
+        postService.posts { [weak self] posts, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            self?.posts = posts!
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+            }
+        }
+    }
+    
+    private func searchPosts(with query: String) {
+        postService.searchPosts(with: query) { [weak self] posts, error in
             if let error = error {
                 print(error.localizedDescription)
                 return
@@ -83,9 +97,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutUI()
-        
-        // "cats" is just a placeholder-query for temporary demonstrative purposes
-        requestPosts(with: "cats")
+        fetchPosts()
     }
 }
 
@@ -98,7 +110,9 @@ extension HomeViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CustomCollectionViewCell.self),
                                                       for: indexPath) as! CustomCollectionViewCell
         let post = posts[indexPath.row]
+        
         cell.cellImageView.image = nil
+        cell.cellImageView.backgroundColor = UIColor(hex: post.color)
         
         func image(data: Data?) -> UIImage? {
             if let data = data {
@@ -113,7 +127,7 @@ extension HomeViewController: UICollectionViewDataSource {
             DispatchQueue.main.async {
                 cell.cellImageView.image = img
                 cell.userNameLabel.text = post.user.name
-                // Gradient layer for readability of the user names (especially when there's white image on the background)
+                
                 let gradient = CAGradientLayer()
                 gradient.frame = cell.cellImageView.bounds
                 gradient.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
@@ -134,8 +148,39 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        requestPosts(with: searchBar.text!)
+        searchPosts(with: searchBar.text!)
+        searchBar.endEditing(true)
     }
     
-    //TODO: Hide the keyboard
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        searchBar.endEditing(true)
+    }
+}
+
+
+// MARK: Extension for UIColor to initialize with hex string
+extension UIColor {
+    public convenience init?(hex: String) {
+        let r, g, b: CGFloat
+
+        if hex.hasPrefix("#") {
+            let start = hex.index(hex.startIndex, offsetBy: 1)
+            let hexColor = String(hex[start...])
+
+            if hexColor.count == 6 {
+                let scanner = Scanner(string: hexColor)
+                var hexNumber: UInt64 = 0
+
+                if scanner.scanHexInt64(&hexNumber) {
+                    r = CGFloat((hexNumber & 0xFF0000) >> 16) / 255.0
+                    g = CGFloat((hexNumber & 0x00FF00) >> 8) / 255.0
+                    b = CGFloat(hexNumber & 0x0000FF) / 255.0
+
+                    self.init(red: r, green: g, blue: b, alpha: 1)
+                    return
+                }
+            }
+        }
+        return nil
+    }
 }

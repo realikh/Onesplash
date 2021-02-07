@@ -21,6 +21,7 @@ struct Post: Decodable {
     let description: String?
     let width: Double
     let height: Double
+    let color: String
     let user: PostUser
     let urls: PostUrls
 }

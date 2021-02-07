@@ -43,11 +43,46 @@ class PostService {
         return request
     }
     
-    func posts(query: String, completion: @escaping ([Post]?, Error?) -> Void) {
+    func posts(completion: @escaping ([Post]?, Error?) -> Void) {
         var comp = components()
-        comp.path = "/search/photos"
         
+        comp.path = "/photos"
+        let req = request(url: comp.url!)
+        
+        let task = session.dataTask(with: req) { data, response, error in
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode) else {
+                completion(nil, PostServiceError.badResponse(response: response!))
+                return
+            }
+            
+            guard let data = data else {
+                completion(nil, PostServiceError.badData)
+                return
+            }
+            
+            do {
+                let response = try JSONDecoder().decode([Post].self, from: data)
+                completion(response, nil)
+            } catch let error {
+                completion(nil, error)
+            }
+        }
+        
+        task.resume()
+    }
+    
+    func searchPosts(with query: String, completion: @escaping ([Post]?, Error?) -> Void) {
+        var comp = components()
+        
+        comp.path = "/search/photos"
         comp.queryItems = [URLQueryItem(name: "query", value: query)]
+
         let req = request(url: comp.url!)
         
         let task = session.dataTask(with: req) { data, response, error in
