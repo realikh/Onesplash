@@ -102,36 +102,8 @@ class HomeViewController: UIViewController {
         tabBarController?.navigationItem.title = "UNSPLASH"
         tabBarController?.navigationItem.titleView = .none
     }
-    
-    
-    private func fetchPosts() {
-        postService.posts { [weak self] posts, error in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-            
-            self?.posts = posts!
-            DispatchQueue.main.async {
-                self?.collectionView.reloadData()
-            }
-        }
-    }
-    
-    private func searchPosts(with query: String) {
-        postService.searchPosts(with: query) { [weak self] posts, error in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-            
-            self?.posts = posts!
-            DispatchQueue.main.async {
-                self?.collectionView.reloadData()
-            }
-        }
-    }
 }
+    
 
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -207,8 +179,6 @@ extension HomeViewController: UIScrollViewDelegate {
                 print(indexPaths)
                 DispatchQueue.main.async {
                     
-//                    self?.collectionView.reloadItems(at: indexPaths)
-//                    self?.collectionView.reloadData()
                     self?.collectionView.performBatchUpdates { [weak self] in
                         self?.collectionView.insertItems(at: indexPaths)
                     }
