@@ -21,6 +21,7 @@ class HomeViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: CustomCollectionViewCell.self))
+        collectionView.contentInsetAdjustmentBehavior  = .never
         return collectionView
     }()
     
@@ -39,32 +40,39 @@ class HomeViewController: UIViewController {
     
     // MARK: Layout
     private func layoutUI() {
-        configureSearchBar()
+//        configureSearchBar()
         configureCollectionView()
     }
     
     private func configureSearchBar() {
         searchBar.delegate = self
         navigationItem.titleView = searchBar
-//        view.addSubview(searchBar)
-//        searchBar.snp.makeConstraints {
-//            $0.left.equalToSuperview()
-//            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-//            $0.right.equalToSuperview()
-//            $0.height.equalTo(44)
-//        }
     }
     
     private func configureCollectionView() {
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints {
-//            $0.left.equalToSuperview()
-//            $0.top.equalTo(searchBar.snp.bottom)
-//            $0.right.equalToSuperview()
-//            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             $0.edges.equalToSuperview()
         }
     }
+
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        layoutUI()
+        fetchPosts()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        tabBarController?.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        tabBarController?.navigationController?.navigationBar.shadowImage = UIImage()
+        tabBarController?.navigationController?.navigationBar.isTranslucent = true
+        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+        tabBarController?.navigationController?.navigationBar.titleTextAttributes = textAttributes
+        tabBarController?.navigationItem.title = "UNSPLASH"
+        tabBarController?.navigationItem.titleView = .none
+    }
+    
     
     private func fetchPosts() {
         postService.posts { [weak self] posts, error in
@@ -92,12 +100,6 @@ class HomeViewController: UIViewController {
                 self?.collectionView.reloadData()
             }
         }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        layoutUI()
-        fetchPosts()
     }
 }
 

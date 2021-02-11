@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		651F8D09FD190DFE7130107A /* Pods_Onesplash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09B8999C3B0ABBC8BBEC808F /* Pods_Onesplash.framework */; };
 		68CA866825C41ADB00192321 /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CA866725C41ADB00192321 /* CustomCollectionViewCell.swift */; };
+		68FE16B925D4068000EE5B5A /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68FE16B825D4068000EE5B5A /* TabViewController.swift */; };
+		68FE16C025D4086800EE5B5A /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68FE16BF25D4086800EE5B5A /* SearchViewController.swift */; };
 		774AC74725BA1D4B002B689F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 774AC74625BA1D4B002B689F /* AppDelegate.swift */; };
 		774AC74925BA1D4B002B689F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 774AC74825BA1D4B002B689F /* SceneDelegate.swift */; };
 		774AC74B25BA1D4B002B689F /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 774AC74A25BA1D4B002B689F /* HomeViewController.swift */; };
@@ -22,6 +24,8 @@
 /* Begin PBXFileReference section */
 		09B8999C3B0ABBC8BBEC808F /* Pods_Onesplash.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Onesplash.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		68CA866725C41ADB00192321 /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
+		68FE16B825D4068000EE5B5A /* TabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
+		68FE16BF25D4086800EE5B5A /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		774AC74325BA1D4B002B689F /* Onesplash.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Onesplash.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		774AC74625BA1D4B002B689F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		774AC74825BA1D4B002B689F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -56,6 +60,25 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		68FE16C225D4230C00EE5B5A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				774AC74A25BA1D4B002B689F /* HomeViewController.swift */,
+				68CA866725C41ADB00192321 /* CustomCollectionViewCell.swift */,
+				68FE16B825D4068000EE5B5A /* TabViewController.swift */,
+				68FE16BF25D4086800EE5B5A /* SearchViewController.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		68FE16C425D4231600EE5B5A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				77E0D5E525BB15690053C7A8 /* Post.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		774AC73A25BA1D4B002B689F = {
 			isa = PBXGroup;
 			children = (
@@ -80,9 +103,8 @@
 				774AC74625BA1D4B002B689F /* AppDelegate.swift */,
 				774AC74825BA1D4B002B689F /* SceneDelegate.swift */,
 				774AF88125C149E800359B3F /* PostService.swift */,
-				774AC74A25BA1D4B002B689F /* HomeViewController.swift */,
-				68CA866725C41ADB00192321 /* CustomCollectionViewCell.swift */,
-				77E0D5E525BB15690053C7A8 /* Post.swift */,
+				68FE16C225D4230C00EE5B5A /* View */,
+				68FE16C425D4231600EE5B5A /* Model */,
 				774AC75225BA1D4F002B689F /* Assets.xcassets */,
 				774AC75425BA1D4F002B689F /* LaunchScreen.storyboard */,
 				774AC75725BA1D4F002B689F /* Info.plist */,
@@ -213,8 +235,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				68FE16B925D4068000EE5B5A /* TabViewController.swift in Sources */,
 				774AC74B25BA1D4B002B689F /* HomeViewController.swift in Sources */,
 				774AC74725BA1D4B002B689F /* AppDelegate.swift in Sources */,
+				68FE16C025D4086800EE5B5A /* SearchViewController.swift in Sources */,
 				774AF88225C149E800359B3F /* PostService.swift in Sources */,
 				68CA866825C41ADB00192321 /* CustomCollectionViewCell.swift in Sources */,
 				774AC74925BA1D4B002B689F /* SceneDelegate.swift in Sources */,
