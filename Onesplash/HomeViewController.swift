@@ -23,6 +23,7 @@ class HomeViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: CustomCollectionViewCell.self))
+        collectionView.contentInsetAdjustmentBehavior  = .never
         return collectionView
     }()
     
@@ -39,7 +40,7 @@ class HomeViewController: UIViewController {
     
     // MARK: Layout
     private func layoutUI() {
-        configureSearchBar()
+//        configureSearchBar()
         configureCollectionView()
     }
     
@@ -84,11 +85,51 @@ class HomeViewController: UIViewController {
             }
         }
     }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutUI()
         fetchPosts()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        tabBarController?.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        tabBarController?.navigationController?.navigationBar.shadowImage = UIImage()
+        tabBarController?.navigationController?.navigationBar.isTranslucent = true
+        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+        tabBarController?.navigationController?.navigationBar.titleTextAttributes = textAttributes
+        tabBarController?.navigationItem.title = "UNSPLASH"
+        tabBarController?.navigationItem.titleView = .none
+    }
+    
+    
+    private func fetchPosts() {
+        postService.posts { [weak self] posts, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            self?.posts = posts!
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+            }
+        }
+    }
+    
+    private func searchPosts(with query: String) {
+        postService.searchPosts(with: query) { [weak self] posts, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            self?.posts = posts!
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+            }
+        }
     }
 }
 
