@@ -23,6 +23,7 @@ class HomeViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: CustomCollectionViewCell.self))
+        collectionView.contentInsetAdjustmentBehavior  = .never
         return collectionView
     }()
     
@@ -39,7 +40,7 @@ class HomeViewController: UIViewController {
     
     // MARK: Layout
     private func layoutUI() {
-        configureSearchBar()
+//        configureSearchBar()
         configureCollectionView()
     }
     
@@ -84,13 +85,25 @@ class HomeViewController: UIViewController {
             }
         }
     }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutUI()
         fetchPosts()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        tabBarController?.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        tabBarController?.navigationController?.navigationBar.shadowImage = UIImage()
+        tabBarController?.navigationController?.navigationBar.isTranslucent = true
+        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
+        tabBarController?.navigationController?.navigationBar.titleTextAttributes = textAttributes
+        tabBarController?.navigationItem.title = "UNSPLASH"
+        tabBarController?.navigationItem.titleView = .none
+    }
 }
+    
 
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -166,8 +179,6 @@ extension HomeViewController: UIScrollViewDelegate {
                 print(indexPaths)
                 DispatchQueue.main.async {
                     
-//                    self?.collectionView.reloadItems(at: indexPaths)
-//                    self?.collectionView.reloadData()
                     self?.collectionView.performBatchUpdates { [weak self] in
                         self?.collectionView.insertItems(at: indexPaths)
                     }
