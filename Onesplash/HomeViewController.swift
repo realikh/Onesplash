@@ -11,6 +11,8 @@ class HomeViewController: UIViewController {
     
     private var images = [UIImage]()
     
+    private var pageNumber = 1
+    
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         return searchBar
@@ -35,8 +37,6 @@ class HomeViewController: UIViewController {
     
     var posts = [Post]()
     
-    var results = [Post]()
-    
     // MARK: Layout
     private func layoutUI() {
         configureSearchBar()
@@ -46,28 +46,19 @@ class HomeViewController: UIViewController {
     private func configureSearchBar() {
         searchBar.delegate = self
         navigationItem.titleView = searchBar
-//        view.addSubview(searchBar)
-//        searchBar.snp.makeConstraints {
-//            $0.left.equalToSuperview()
-//            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-//            $0.right.equalToSuperview()
-//            $0.height.equalTo(44)
-//        }
     }
     
     private func configureCollectionView() {
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints {
-//            $0.left.equalToSuperview()
-//            $0.top.equalTo(searchBar.snp.bottom)
-//            $0.right.equalToSuperview()
-//            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             $0.edges.equalToSuperview()
         }
+        collectionView.register(FooterCollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+                                withReuseIdentifier: String(describing: FooterCollectionReusableView.self))
     }
-    
+
     private func fetchPosts() {
-        postService.posts { [weak self] posts, error in
+        postService.posts(pageNumber: 1) { [weak self] posts, error in
             if let error = error {
                 print(error.localizedDescription)
                 return
@@ -137,8 +128,57 @@ extension HomeViewController: UICollectionViewDataSource {
         }
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let footer = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: String(describing: FooterCollectionReusableView.self), for: indexPath) as! FooterCollectionReusableView
+        
+        footer.configure()
+        
+        return footer
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        return CGSize(width: view.frame.size.width, height: 100)
+    }
 }
 
+// MARK: ScrollViewDelegate
+// Handle when user scrolled to the bottom of collectionView and fetch more data
+extension HomeViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // Get the current vertical position of collectionView
+        guard !postService.isPaginating else { return }
+        
+        let position = scrollView.contentOffset.y
+        
+        if position > (collectionView.contentSize.height - 100
+                        - scrollView.frame.size.height) {
+            postService.posts(pagination: true, pageNumber: pageNumber) { [weak self] newPosts, error  in
+                guard error == nil, let newPosts = newPosts else { print(error?.localizedDescription ?? "error"); return }
+                self?.pageNumber += 1
+                self?.posts.append(contentsOf: newPosts)
+                
+                var indexPaths = [IndexPath]()
+                for index in (self!.pageNumber - 1)*10...(self!.pageNumber * 10 - 1) {
+                    indexPaths.append(IndexPath(item: index, section: 0))
+                    print(index)
+                }
+                print(indexPaths)
+                DispatchQueue.main.async {
+                    
+//                    self?.collectionView.reloadItems(at: indexPaths)
+//                    self?.collectionView.reloadData()
+                    self?.collectionView.performBatchUpdates { [weak self] in
+                        self?.collectionView.insertItems(at: indexPaths)
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+// MARK: CollectionViewDelegateFlowLayout
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let post = posts[indexPath.row]
@@ -146,6 +186,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+//MARK: SearchBarDelegate
 extension HomeViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchPosts(with: searchBar.text!)
@@ -158,29 +199,4 @@ extension HomeViewController: UISearchBarDelegate {
 }
 
 
-// MARK: Extension for UIColor to initialize with hex string
-extension UIColor {
-    public convenience init?(hex: String) {
-        let r, g, b: CGFloat
 
-        if hex.hasPrefix("#") {
-            let start = hex.index(hex.startIndex, offsetBy: 1)
-            let hexColor = String(hex[start...])
-
-            if hexColor.count == 6 {
-                let scanner = Scanner(string: hexColor)
-                var hexNumber: UInt64 = 0
-
-                if scanner.scanHexInt64(&hexNumber) {
-                    r = CGFloat((hexNumber & 0xFF0000) >> 16) / 255.0
-                    g = CGFloat((hexNumber & 0x00FF00) >> 8) / 255.0
-                    b = CGFloat(hexNumber & 0x0000FF) / 255.0
-
-                    self.init(red: r, green: g, blue: b, alpha: 1)
-                    return
-                }
-            }
-        }
-        return nil
-    }
-}
