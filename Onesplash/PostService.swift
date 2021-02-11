@@ -19,6 +19,8 @@ fileprivate struct APIResponse: Decodable {
 
 class PostService {
     
+    var isPaginating = false
+    
     private let accessKey = "g_bih1OD8GhQVHrcjPPqyo7Ho19HZddWwakzUgjVNuM"
     
     static var shared = PostService()
@@ -43,10 +45,14 @@ class PostService {
         return request
     }
     
-    func posts(completion: @escaping ([Post]?, Error?) -> Void) {
+    func posts(pagination: Bool = false, pageNumber: Int, completion: @escaping ([Post]?, Error?) -> Void) {
+        
+        if pagination { isPaginating = true }
         var comp = components()
         
         comp.path = "/photos"
+        comp.queryItems = [URLQueryItem(name: "page", value: "\(pageNumber)")]
+        
         let req = request(url: comp.url!)
         
         let task = session.dataTask(with: req) { data, response, error in
@@ -69,6 +75,9 @@ class PostService {
             do {
                 let response = try JSONDecoder().decode([Post].self, from: data)
                 completion(response, nil)
+                if pagination {
+                    self.isPaginating = false
+                }
             } catch let error {
                 completion(nil, error)
             }
