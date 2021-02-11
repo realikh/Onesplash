@@ -60,25 +60,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		68FE16C225D4230C00EE5B5A /* View */ = {
-			isa = PBXGroup;
-			children = (
-				774AC74A25BA1D4B002B689F /* HomeViewController.swift */,
-				68CA866725C41ADB00192321 /* CustomCollectionViewCell.swift */,
-				68FE16B825D4068000EE5B5A /* TabViewController.swift */,
-				68FE16BF25D4086800EE5B5A /* SearchViewController.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		68FE16C425D4231600EE5B5A /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				77E0D5E525BB15690053C7A8 /* Post.swift */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
 		774AC73A25BA1D4B002B689F = {
 			isa = PBXGroup;
 			children = (
@@ -103,8 +84,11 @@
 				774AC74625BA1D4B002B689F /* AppDelegate.swift */,
 				774AC74825BA1D4B002B689F /* SceneDelegate.swift */,
 				774AF88125C149E800359B3F /* PostService.swift */,
-				68FE16C225D4230C00EE5B5A /* View */,
-				68FE16C425D4231600EE5B5A /* Model */,
+				774AC74A25BA1D4B002B689F /* HomeViewController.swift */,
+				68CA866725C41ADB00192321 /* CustomCollectionViewCell.swift */,
+				68FE16B825D4068000EE5B5A /* TabViewController.swift */,
+				68FE16BF25D4086800EE5B5A /* SearchViewController.swift */,
+				77E0D5E525BB15690053C7A8 /* Post.swift */,
 				774AC75225BA1D4F002B689F /* Assets.xcassets */,
 				774AC75425BA1D4F002B689F /* LaunchScreen.storyboard */,
 				774AC75725BA1D4F002B689F /* Info.plist */,
