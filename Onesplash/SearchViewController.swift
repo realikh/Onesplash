@@ -13,12 +13,15 @@ class SearchViewController: UIViewController {
     
     let postService = PostService.shared
     let collectionService = CollectionService.shared
+    let userService = UserService.shared
     
     var posts = [Post]()
     var collections = [Collection]()
+    var users = [User]()
     
     var results = [Post]()
     var collectionResult = [Collection]()
+    var userResults = [User]()
     
     private var scopeButtonIndex = 0
     
@@ -38,6 +41,7 @@ class SearchViewController: UIViewController {
         collectionView.delegate = self
         collectionView.register(PostsCustomCell.self, forCellWithReuseIdentifier: String(describing: PostsCustomCell.self))
         collectionView.register(CollectionsCustomCell.self, forCellWithReuseIdentifier: String(describing: CollectionsCustomCell.self))
+        collectionView.register(UsersCustomCell.self, forCellWithReuseIdentifier: String(describing: UsersCustomCell.self))
         collectionView.alpha = 0
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.backgroundColor = UIColor(named: "DarkTheme")
@@ -46,7 +50,7 @@ class SearchViewController: UIViewController {
     
     private let flowLayout: UICollectionViewFlowLayout = {
         let collectionViewFlowLayout = UICollectionViewFlowLayout()
-        collectionViewFlowLayout.minimumLineSpacing = 20
+        collectionViewFlowLayout.minimumLineSpacing = 10
         collectionViewFlowLayout.minimumInteritemSpacing = 0
         return collectionViewFlowLayout
     }()
@@ -128,6 +132,20 @@ class SearchViewController: UIViewController {
         }
     }
     
+    private func searchUsers(with query: String) {
+        userService.searchUsers(with: query) { [weak self] users, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            self?.users = users!
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+            }
+        }
+    }
+    
 }
 
 extension SearchViewController: UITableViewDataSource {
@@ -144,17 +162,18 @@ extension SearchViewController: UITableViewDataSource {
 
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        tableView.alpha = 0
+        collectionView.alpha = 1.0
         switch scopeButtonIndex {
         case 0:
             searchPosts(with: searchBar.text!)
             searchBar.endEditing(true)
-            tableView.alpha = 0
-            collectionView.alpha = 1.0
-        default:
+        case 1:
             searchCollections(with: searchBar.text!)
             searchBar.endEditing(true)
-            tableView.alpha = 0
-            collectionView.alpha = 1.0
+        default:
+            searchUsers(with: searchBar.text!)
+            searchBar.endEditing(true)
         }
         
     }
@@ -175,8 +194,10 @@ extension SearchViewController: UISearchBarDelegate {
         switch scopeButtonIndex {
         case 0:
             searchPosts(with: searchBar.text!)
-        default:
+        case 1:
             searchCollections(with: searchBar.text!)
+        default:
+            searchUsers(with: searchBar.text!)
         }
     }
 }
@@ -186,8 +207,10 @@ extension SearchViewController: UICollectionViewDataSource {
         switch scopeButtonIndex {
         case 0:
             return posts.count
-        default:
+        case 1:
             return collections.count
+        default:
+            return users.count
         }
     }
     
@@ -223,7 +246,7 @@ extension SearchViewController: UICollectionViewDataSource {
                 }
             }
             return cell
-        default:
+        case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CollectionsCustomCell.self),
                                                           for: indexPath) as! CollectionsCustomCell
             let collection = collections[indexPath.row]
@@ -247,6 +270,31 @@ extension SearchViewController: UICollectionViewDataSource {
                 }
             }
             return cell
+        default:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: UsersCustomCell.self),
+                                                          for: indexPath) as! UsersCustomCell
+            let user = users[indexPath.row]
+            
+            cell.userImageView.image = nil
+            cell.userImageView.backgroundColor = UIColor(hex: user.profile_image.medium)
+            
+            func image(data: Data?) -> UIImage? {
+                if let data = data {
+                    return UIImage(data: data)
+                }
+                return UIImage(systemName: "picture")
+            }
+            
+            userService.image(user: user) { [weak self] data, error  in
+                guard let img = image(data: data) else { return }
+                self?.images.append(img)
+                DispatchQueue.main.async {
+                    cell.userImageView.image = img
+                    cell.nameLabel.text = user.name
+                    cell.userNameLabel.text = user.username
+                }
+            }
+            return cell
         }
         
     }
@@ -264,8 +312,10 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
         case 0:
             let post = posts[indexPath.row]
             return CGSize(width: view.frame.width, height: CGFloat(350 * (post.height/post.width)))
-        default:
+        case 1:
             return CGSize(width: view.frame.width - 20, height: 200)
+        default:
+            return CGSize(width: view.frame.width , height: 100)
         }
         
     }
