@@ -14,6 +14,7 @@
 		680BC0B225D6C1D30003D341 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680BC0B125D6C1D30003D341 /* UserService.swift */; };
 		680BC0B525D6C1FB0003D341 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680BC0B425D6C1FB0003D341 /* User.swift */; };
 		680BC0B825D6C5920003D341 /* UsersCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680BC0B725D6C5920003D341 /* UsersCustomCell.swift */; };
+		680BC0BB25D6F0D80003D341 /* ExpandedCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680BC0BA25D6F0D80003D341 /* ExpandedCollectionViewController.swift */; };
 		68CA866825C41ADB00192321 /* PostsCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CA866725C41ADB00192321 /* PostsCustomCell.swift */; };
 		68FE16B925D4068000EE5B5A /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68FE16B825D4068000EE5B5A /* TabViewController.swift */; };
 		68FE16C025D4086800EE5B5A /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68FE16BF25D4086800EE5B5A /* SearchViewController.swift */; };
@@ -37,6 +38,7 @@
 		680BC0B125D6C1D30003D341 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		680BC0B425D6C1FB0003D341 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		680BC0B725D6C5920003D341 /* UsersCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersCustomCell.swift; sourceTree = "<group>"; };
+		680BC0BA25D6F0D80003D341 /* ExpandedCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandedCollectionViewController.swift; sourceTree = "<group>"; };
 		68CA866725C41ADB00192321 /* PostsCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsCustomCell.swift; sourceTree = "<group>"; };
 		68FE16B825D4068000EE5B5A /* TabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
 		68FE16BF25D4086800EE5B5A /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 				680BC0B125D6C1D30003D341 /* UserService.swift */,
 				680BC0B425D6C1FB0003D341 /* User.swift */,
 				680BC0B725D6C5920003D341 /* UsersCustomCell.swift */,
+				680BC0BA25D6F0D80003D341 /* ExpandedCollectionViewController.swift */,
 			);
 			path = Onesplash;
 			sourceTree = "<group>";
@@ -272,6 +275,7 @@
 				774AC74925BA1D4B002B689F /* SceneDelegate.swift in Sources */,
 				774AC75125BA1D4B002B689F /* Onesplash.xcdatamodeld in Sources */,
 				77474F8A25D4425500D75C78 /* FooterCollectionReusableView.swift in Sources */,
+				680BC0BB25D6F0D80003D341 /* ExpandedCollectionViewController.swift in Sources */,
 				680BC0B225D6C1D30003D341 /* UserService.swift in Sources */,
 				77E0D5E625BB15690053C7A8 /* Post.swift in Sources */,
 				680BC0AE25D69F480003D341 /* CollectionsCustomCell.swift in Sources */,

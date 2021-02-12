@@ -102,6 +102,7 @@ class SearchViewController: UIViewController {
         searchBar.delegate = self
         tabBarController?.navigationItem.titleView = searchBar
         tabBarController?.navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.barTintColor = UIColor(named: "DarkTheme")
     }
     
     private func searchPosts(with query: String) {
@@ -296,14 +297,29 @@ extension SearchViewController: UICollectionViewDataSource {
             }
             return cell
         }
-        
     }
 }
 
 
 
 extension SearchViewController: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if scopeButtonIndex == 1 {
+            let collection = collections[indexPath.row]
+            let transition = CATransition()
+            transition.duration = 0.5
+            transition.type = CATransitionType.push
+            transition.subtype = CATransitionSubtype.fromRight
+            transition.timingFunction = CAMediaTimingFunction(name:CAMediaTimingFunctionName.easeInEaseOut)
+            view.window!.layer.add(transition, forKey: kCATransition)
+            let vc = ExpandedCollectionViewController()
+            vc.collectionId = Int(collection.id)
+            vc.collectionOwner = collection.user.name
+            vc.collectionTitle = collection.title
+            vc.modalPresentationStyle = .fullScreen
+            self.navigationController?.pushViewController(vc, animated: false)
+        }
+    }
 }
 
 extension SearchViewController: UICollectionViewDelegateFlowLayout {

@@ -40,7 +40,6 @@ class HomeViewController: UIViewController {
     
     // MARK: Layout
     private func layoutUI() {
-//        configureSearchBar()
         configureCollectionView()
     }
     
@@ -102,6 +101,25 @@ class HomeViewController: UIViewController {
         tabBarController?.navigationItem.title = "UNSPLASH"
         tabBarController?.navigationItem.titleView = .none
     }
+//    Test fucntion
+//    private func imageTapped(_ sender: UIImage) {
+//        let newImageView = UIImageView(image: sender)
+//        newImageView.frame = UIScreen.main.bounds
+//        newImageView.backgroundColor = .black
+//        newImageView.contentMode = .scaleAspectFit
+//        newImageView.isUserInteractionEnabled = true
+//        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissFullscreenImage))
+//        newImageView.addGestureRecognizer(tap)
+//        self.view.addSubview(newImageView)
+//        self.navigationController?.isNavigationBarHidden = true
+//        self.tabBarController?.tabBar.isHidden = true
+//    }
+//
+//    @objc private func dismissFullscreenImage(_ sender: UITapGestureRecognizer) {
+//        self.navigationController?.isNavigationBarHidden = false
+//        self.tabBarController?.tabBar.isHidden = false
+//        sender.view?.removeFromSuperview()
+//    }
 }
     
 
@@ -208,6 +226,26 @@ extension HomeViewController: UISearchBarDelegate {
         searchBar.endEditing(true)
     }
 }
+//Test
+//extension HomeViewController: UICollectionViewDelegate {
+//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        let post = posts[indexPath.row]
+//        func image(data: Data?) -> UIImage? {
+//            if let data = data {
+//                return UIImage(data: data)
+//            }
+//            return UIImage(systemName: "picture")
+//        }
+//
+//        postService.image(post: post) { [weak self] data, error  in
+//            guard let img = image(data: data) else { return }
+//            self?.images.append(img)
+//            DispatchQueue.main.async {
+//                self!.imageTapped(img)
+//            }
+//        }
+//    }
+//}
 
 
 

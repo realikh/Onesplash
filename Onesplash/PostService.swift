@@ -122,6 +122,42 @@ class PostService {
         task.resume()
     }
     
+    func retrieveCollectionPhotos(with id: Int, pageNumber: Int, completion: @escaping ([Post]?, Error?) -> Void) {
+        var comp = components()
+        
+        comp.path = "/collections/\(id)/photos"
+        comp.queryItems = [URLQueryItem(name: "page", value: "\(pageNumber)")]
+
+        let req = request(url: comp.url!)
+        
+        let task = session.dataTask(with: req) { data, response, error in
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse,
+                  (200...299).contains(httpResponse.statusCode) else {
+                completion(nil, CollectionServiceError.badResponse(response: response!))
+                return
+            }
+            
+            guard let data = data else {
+                completion(nil, CollectionServiceError.badData)
+                return
+            }
+            
+            do {
+                let response = try JSONDecoder().decode([Post].self, from: data)
+                completion(response, nil)
+            } catch let error {
+                completion(nil, error)
+            }
+        }
+        
+        task.resume()
+    }
+    
     private func download(imageURL: URL, completion: @escaping (Data?, Error?) -> (Void)) {
         let task = session.downloadTask(with: imageURL) { localUrl, response, error in
             if let error = error {
