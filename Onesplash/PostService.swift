@@ -20,9 +20,7 @@ fileprivate struct APIResponse: Decodable {
 class PostService {
     
     var isPaginating = false
-    
     private let accessKey = "g_bih1OD8GhQVHrcjPPqyo7Ho19HZddWwakzUgjVNuM"
-    
     static var shared = PostService()
     
     let session: URLSession
@@ -45,9 +43,9 @@ class PostService {
         return request
     }
     
-    func posts(pagination: Bool = false, pageNumber: Int, completion: @escaping ([Post]?, Error?) -> Void) {
+    func posts(pageNumber: Int, completion: @escaping ([Post]?, Error?) -> Void) {
         
-        if pagination { isPaginating = true }
+        isPaginating = true
         var comp = components()
         
         comp.path = "/photos"
@@ -61,23 +59,14 @@ class PostService {
                 return
             }
             
-            guard let httpResponse = response as? HTTPURLResponse,
-                  (200...299).contains(httpResponse.statusCode) else {
-                completion(nil, PostServiceError.badResponse(response: response!))
-                return
-            }
-            
-            guard let data = data else {
-                completion(nil, PostServiceError.badData)
-                return
-            }
+            guard let data = data else { return }
             
             do {
                 let response = try JSONDecoder().decode([Post].self, from: data)
                 completion(response, nil)
-                if pagination {
-                    self.isPaginating = false
-                }
+                
+                self.isPaginating = false
+                
             } catch let error {
                 completion(nil, error)
             }
@@ -99,17 +88,7 @@ class PostService {
                 completion(nil, error)
                 return
             }
-            
-            guard let httpResponse = response as? HTTPURLResponse,
-                  (200...299).contains(httpResponse.statusCode) else {
-                completion(nil, PostServiceError.badResponse(response: response!))
-                return
-            }
-            
-            guard let data = data else {
-                completion(nil, PostServiceError.badData)
-                return
-            }
+            guard let data = data else { return }
             
             do {
                 let response = try JSONDecoder().decode(APIResponse.self, from: data)

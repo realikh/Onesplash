@@ -11,6 +11,7 @@ class TabViewController: UITabBarController, UISearchBarDelegate {
     
     private let homeVC = HomeViewController()
     private let searchVC = SearchViewController()
+    private var images = [UIImage]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
