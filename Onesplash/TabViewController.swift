@@ -14,6 +14,7 @@ class TabViewController: UITabBarController, UISearchBarDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tabBar.barTintColor = UIColor(named: "DarkTheme")
         homeVC.tabBarItem = UITabBarItem(tabBarSystemItem: .featured, tag: 0)
         searchVC.tabBarItem = UITabBarItem(tabBarSystemItem: .search, tag: 1)
         let tabBarList = [homeVC,searchVC]

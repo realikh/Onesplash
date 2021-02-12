@@ -12,16 +12,23 @@ class SearchViewController: UIViewController {
     private var images = [UIImage]()
     
     let postService = PostService.shared
+    let collectionService = CollectionService.shared
     
     var posts = [Post]()
+    var collections = [Collection]()
     
     var results = [Post]()
+    var collectionResult = [Collection]()
+    
+    private var scopeButtonIndex = 0
+    
     
     private let vc = HomeViewController()
     
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.contentInsetAdjustmentBehavior = .never
+        tableView.backgroundColor = UIColor(named: "DarkTheme")
         return tableView
     }()
     
@@ -29,15 +36,17 @@ class SearchViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(CustomCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: CustomCollectionViewCell.self))
+        collectionView.register(PostsCustomCell.self, forCellWithReuseIdentifier: String(describing: PostsCustomCell.self))
+        collectionView.register(CollectionsCustomCell.self, forCellWithReuseIdentifier: String(describing: CollectionsCustomCell.self))
         collectionView.alpha = 0
         collectionView.contentInsetAdjustmentBehavior = .never
+        collectionView.backgroundColor = UIColor(named: "DarkTheme")
         return collectionView
     }()
     
     private let flowLayout: UICollectionViewFlowLayout = {
         let collectionViewFlowLayout = UICollectionViewFlowLayout()
-        collectionViewFlowLayout.minimumLineSpacing = 0
+        collectionViewFlowLayout.minimumLineSpacing = 20
         collectionViewFlowLayout.minimumInteritemSpacing = 0
         return collectionViewFlowLayout
     }()
@@ -45,12 +54,16 @@ class SearchViewController: UIViewController {
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.showsScopeBar = true
+        searchBar.tintColor = .white
         searchBar.scopeButtonTitles = ["Photos", "Collections", "Users"]
+        searchBar.barTintColor = UIColor(named: "DarkTheme")
+        searchBar.backgroundColor = UIColor(named: "DarkTheme")
         return searchBar
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor(named: "DarkTheme")
         layoutUI()
     }
     
@@ -74,7 +87,10 @@ class SearchViewController: UIViewController {
     private func configureCollectionView() {
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.right.equalTo(view.safeAreaLayoutGuide)
+            $0.left.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
@@ -98,6 +114,20 @@ class SearchViewController: UIViewController {
         }
     }
     
+    private func searchCollections(with query: String) {
+        collectionService.searchCollections(with: query) { [weak self] collections, error in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            self?.collections = collections!
+            DispatchQueue.main.async {
+                self?.collectionView.reloadData()
+            }
+        }
+    }
+    
 }
 
 extension SearchViewController: UITableViewDataSource {
@@ -114,10 +144,19 @@ extension SearchViewController: UITableViewDataSource {
 
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchPosts(with: searchBar.text!)
-        searchBar.endEditing(true)
-        tableView.alpha = 0
-        collectionView.alpha = 1.0
+        switch scopeButtonIndex {
+        case 0:
+            searchPosts(with: searchBar.text!)
+            searchBar.endEditing(true)
+            tableView.alpha = 0
+            collectionView.alpha = 1.0
+        default:
+            searchCollections(with: searchBar.text!)
+            searchBar.endEditing(true)
+            tableView.alpha = 0
+            collectionView.alpha = 1.0
+        }
+        
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -130,43 +169,86 @@ extension SearchViewController: UISearchBarDelegate {
             collectionView.alpha = 0
         }
     }
+    
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        scopeButtonIndex = selectedScope
+        switch scopeButtonIndex {
+        case 0:
+            searchPosts(with: searchBar.text!)
+        default:
+            searchCollections(with: searchBar.text!)
+        }
+    }
 }
 
 extension SearchViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return posts.count
+        switch scopeButtonIndex {
+        case 0:
+            return posts.count
+        default:
+            return collections.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CustomCollectionViewCell.self),
-                                                      for: indexPath) as! CustomCollectionViewCell
-        let post = posts[indexPath.row]
-        
-        cell.cellImageView.image = nil
-        cell.cellImageView.backgroundColor = UIColor(hex: post.color)
-        
-        func image(data: Data?) -> UIImage? {
-            if let data = data {
-                return UIImage(data: data)
+        switch scopeButtonIndex {
+        case 0:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PostsCustomCell.self),
+                                                          for: indexPath) as! PostsCustomCell
+            let post = posts[indexPath.row]
+            
+            cell.cellImageView.image = nil
+            cell.cellImageView.backgroundColor = UIColor(hex: post.color)
+            
+            func image(data: Data?) -> UIImage? {
+                if let data = data {
+                    return UIImage(data: data)
+                }
+                return UIImage(systemName: "picture")
             }
-            return UIImage(systemName: "picture")
+            
+            postService.image(post: post) { [weak self] data, error  in
+                guard let img = image(data: data) else { return }
+                self?.images.append(img)
+                DispatchQueue.main.async {
+                    cell.cellImageView.image = img
+                    cell.userNameLabel.text = post.user.name
+                    
+                    let gradient = CAGradientLayer()
+                    gradient.frame = cell.cellImageView.bounds
+                    gradient.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
+                    gradient.locations = [0.1, 1]
+                    cell.cellImageView.layer.mask = gradient
+                }
+            }
+            return cell
+        default:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CollectionsCustomCell.self),
+                                                          for: indexPath) as! CollectionsCustomCell
+            let collection = collections[indexPath.row]
+            
+            cell.collectionImageView.image = nil
+            cell.collectionImageView.backgroundColor = UIColor(hex: collection.cover_photo.color)
+            
+            func image(data: Data?) -> UIImage? {
+                if let data = data {
+                    return UIImage(data: data)
+                }
+                return UIImage(systemName: "picture")
+            }
+            
+            postService.image(post: collection.cover_photo) { [weak self] data, error  in
+                guard let img = image(data: data) else { return }
+                self?.images.append(img)
+                DispatchQueue.main.async {
+                    cell.collectionImageView.image = img
+                    cell.collectionNameLabel.text = collection.title
+                }
+            }
+            return cell
         }
         
-        postService.image(post: post) { [weak self] data, error  in
-            guard let img = image(data: data) else { return }
-            self?.images.append(img)
-            DispatchQueue.main.async {
-                cell.cellImageView.image = img
-                cell.userNameLabel.text = post.user.name
-                
-                let gradient = CAGradientLayer()
-                gradient.frame = cell.cellImageView.bounds
-                gradient.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
-                gradient.locations = [0.1, 1]
-                cell.cellImageView.layer.mask = gradient
-            }
-        }
-        return cell
     }
 }
 
@@ -178,8 +260,14 @@ extension SearchViewController: UICollectionViewDelegate {
 
 extension SearchViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let post = posts[indexPath.row]
-        return CGSize(width: view.frame.width, height: CGFloat(350 * (post.height/post.width)))
+        switch scopeButtonIndex {
+        case 0:
+            let post = posts[indexPath.row]
+            return CGSize(width: view.frame.width, height: CGFloat(350 * (post.height/post.width)))
+        default:
+            return CGSize(width: view.frame.width - 20, height: 200)
+        }
+        
     }
 }
 

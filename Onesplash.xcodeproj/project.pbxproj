@@ -8,7 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		651F8D09FD190DFE7130107A /* Pods_Onesplash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09B8999C3B0ABBC8BBEC808F /* Pods_Onesplash.framework */; };
-		68CA866825C41ADB00192321 /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CA866725C41ADB00192321 /* CustomCollectionViewCell.swift */; };
+		680BC0A825D697950003D341 /* CollectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680BC0A725D697950003D341 /* CollectionService.swift */; };
+		680BC0AB25D698720003D341 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680BC0AA25D698720003D341 /* Collection.swift */; };
+		680BC0AE25D69F480003D341 /* CollectionsCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680BC0AD25D69F480003D341 /* CollectionsCustomCell.swift */; };
+		68CA866825C41ADB00192321 /* PostsCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CA866725C41ADB00192321 /* PostsCustomCell.swift */; };
 		68FE16B925D4068000EE5B5A /* TabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68FE16B825D4068000EE5B5A /* TabViewController.swift */; };
 		68FE16C025D4086800EE5B5A /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68FE16BF25D4086800EE5B5A /* SearchViewController.swift */; };
 		77474F8A25D4425500D75C78 /* FooterCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77474F8925D4425500D75C78 /* FooterCollectionReusableView.swift */; };
@@ -25,7 +28,10 @@
 
 /* Begin PBXFileReference section */
 		09B8999C3B0ABBC8BBEC808F /* Pods_Onesplash.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Onesplash.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		68CA866725C41ADB00192321 /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
+		680BC0A725D697950003D341 /* CollectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionService.swift; sourceTree = "<group>"; };
+		680BC0AA25D698720003D341 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
+		680BC0AD25D69F480003D341 /* CollectionsCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsCustomCell.swift; sourceTree = "<group>"; };
+		68CA866725C41ADB00192321 /* PostsCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsCustomCell.swift; sourceTree = "<group>"; };
 		68FE16B825D4068000EE5B5A /* TabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewController.swift; sourceTree = "<group>"; };
 		68FE16BF25D4086800EE5B5A /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		77474F8925D4425500D75C78 /* FooterCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterCollectionReusableView.swift; sourceTree = "<group>"; };
@@ -87,18 +93,20 @@
 			children = (
 				774AF88125C149E800359B3F /* PostService.swift */,
 				774AC74A25BA1D4B002B689F /* HomeViewController.swift */,
-				68CA866725C41ADB00192321 /* CustomCollectionViewCell.swift */,
 				68FE16B825D4068000EE5B5A /* TabViewController.swift */,
 				68FE16BF25D4086800EE5B5A /* SearchViewController.swift */,
 				77E0D5E525BB15690053C7A8 /* Post.swift */,
 				77474F8925D4425500D75C78 /* FooterCollectionReusableView.swift */,
-				68CA866725C41ADB00192321 /* CustomCollectionViewCell.swift */,
+				68CA866725C41ADB00192321 /* PostsCustomCell.swift */,
 				7765983D25D520BD00D0ACD9 /* UIColor.swift */,
 				774AC75425BA1D4F002B689F /* LaunchScreen.storyboard */,
 				7765983825D51D7100D0ACD9 /* Resources */,
 				7765983725D51D5D00D0ACD9 /* Supporting Files */,
 				774AC75725BA1D4F002B689F /* Info.plist */,
 				774AC74F25BA1D4B002B689F /* Onesplash.xcdatamodeld */,
+				680BC0A725D697950003D341 /* CollectionService.swift */,
+				680BC0AA25D698720003D341 /* Collection.swift */,
+				680BC0AD25D69F480003D341 /* CollectionsCustomCell.swift */,
 			);
 			path = Onesplash;
 			sourceTree = "<group>";
@@ -245,13 +253,16 @@
 				68FE16B925D4068000EE5B5A /* TabViewController.swift in Sources */,
 				774AC74B25BA1D4B002B689F /* HomeViewController.swift in Sources */,
 				774AC74725BA1D4B002B689F /* AppDelegate.swift in Sources */,
+				680BC0A825D697950003D341 /* CollectionService.swift in Sources */,
 				68FE16C025D4086800EE5B5A /* SearchViewController.swift in Sources */,
 				774AF88225C149E800359B3F /* PostService.swift in Sources */,
-				68CA866825C41ADB00192321 /* CustomCollectionViewCell.swift in Sources */,
+				680BC0AB25D698720003D341 /* Collection.swift in Sources */,
+				68CA866825C41ADB00192321 /* PostsCustomCell.swift in Sources */,
 				774AC74925BA1D4B002B689F /* SceneDelegate.swift in Sources */,
 				774AC75125BA1D4B002B689F /* Onesplash.xcdatamodeld in Sources */,
 				77474F8A25D4425500D75C78 /* FooterCollectionReusableView.swift in Sources */,
 				77E0D5E625BB15690053C7A8 /* Post.swift in Sources */,
+				680BC0AE25D69F480003D341 /* CollectionsCustomCell.swift in Sources */,
 				7765983E25D520BD00D0ACD9 /* UIColor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
