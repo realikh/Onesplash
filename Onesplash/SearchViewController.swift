@@ -11,8 +11,7 @@ class SearchViewController: UIViewController {
     
     private var images = [UIImage]()
     
-    let viewModel = HomeViewModel()
-    let postService = PostService.shared
+    let viewModel = SearchViewModel()
     let collectionService = CollectionService.shared
     let userService = UserService.shared
     
@@ -68,6 +67,7 @@ class SearchViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "DarkTheme")
         layoutUI()
+        bindViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -103,16 +103,12 @@ class SearchViewController: UIViewController {
         tabBarController?.navigationController?.navigationBar.isTranslucent = false
     }
     
-    private func searchPosts(with query: String) {
-        postService.posts(query: query, pageNumber: 1) { [weak self] posts, error in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-            
-            self?.posts = posts!
-            DispatchQueue.main.async {
-                self?.collectionView.reloadData()
+    private func bindViewModel() {
+        viewModel.didEndRequest = { indexPaths in
+            DispatchQueue.main.async { [weak self] in
+                self?.collectionView.performBatchUpdates { [weak self] in
+                    self?.collectionView.insertItems(at: indexPaths)
+                }
             }
         }
     }
@@ -165,7 +161,8 @@ extension SearchViewController: UISearchBarDelegate {
         collectionView.alpha = 1.0
         switch scopeButtonIndex {
         case 0:
-            searchPosts(with: searchBar.text!)
+            
+            viewModel.fetchPosts(with: searchBar.text ?? "cats")
             searchBar.endEditing(true)
         case 1:
             searchCollections(with: searchBar.text!)
@@ -182,7 +179,7 @@ extension SearchViewController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText == ""{
+        if searchText == "" {
             tableView.alpha = 1.0
             collectionView.alpha = 0
         }
@@ -192,7 +189,7 @@ extension SearchViewController: UISearchBarDelegate {
         scopeButtonIndex = selectedScope
         switch scopeButtonIndex {
         case 0:
-            searchPosts(with: searchBar.text!)
+            viewModel.fetchPosts(with: searchBar.text ?? "cats")
         case 1:
             searchCollections(with: searchBar.text!)
         default:
@@ -205,7 +202,7 @@ extension SearchViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch scopeButtonIndex {
         case 0:
-            return posts.count
+            return viewModel.posts.count
         case 1:
             return collections.count
         default:
@@ -218,7 +215,7 @@ extension SearchViewController: UICollectionViewDataSource {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PostsCustomCell.self),
                                                           for: indexPath) as! PostsCustomCell
-            let post = posts[indexPath.row]
+            let post = viewModel.posts[indexPath.row]
             
             cell.cellImageView.image = nil
             cell.cellImageView.backgroundColor = UIColor(hex: post.color)
@@ -308,7 +305,7 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch scopeButtonIndex {
         case 0:
-            let post = posts[indexPath.row]
+            let post = viewModel.posts[indexPath.row]
             return CGSize(width: view.frame.width, height: CGFloat(350 * (post.height/post.width)))
         case 1:
             return CGSize(width: view.frame.width - 20, height: 200)
@@ -319,3 +316,14 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+extension SearchViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // Get the current vertical position of collectionView
+        
+        let position = scrollView.contentOffset.y
+        let distanceToTheEndOfScrollView = collectionView.contentSize.height - 100 - scrollView.frame.size.height
+        if position > (distanceToTheEndOfScrollView) {
+            viewModel.fetchPosts(with: searchBar.text ?? "cats")
+        }
+    }
+}

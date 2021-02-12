@@ -27,6 +27,7 @@
 		774AC75625BA1D4F002B689F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 774AC75425BA1D4F002B689F /* LaunchScreen.storyboard */; };
 		774AF88225C149E800359B3F /* PostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 774AF88125C149E800359B3F /* PostService.swift */; };
 		7765983E25D520BD00D0ACD9 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7765983D25D520BD00D0ACD9 /* UIColor.swift */; };
+		77DCFD9925D70BBB00EED409 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DCFD9825D70BBB00EED409 /* SearchViewModel.swift */; };
 		77E0D5E625BB15690053C7A8 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E0D5E525BB15690053C7A8 /* Post.swift */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +54,7 @@
 		774AC75725BA1D4F002B689F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		774AF88125C149E800359B3F /* PostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostService.swift; sourceTree = "<group>"; };
 		7765983D25D520BD00D0ACD9 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		77DCFD9825D70BBB00EED409 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		77E0D5E525BB15690053C7A8 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		873E1B43992A3006AB4AED55 /* Pods-Onesplash.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Onesplash.release.xcconfig"; path = "Target Support Files/Pods-Onesplash/Pods-Onesplash.release.xcconfig"; sourceTree = "<group>"; };
 		CEE01C462177F6FCD46322EB /* Pods-Onesplash.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Onesplash.debug.xcconfig"; path = "Target Support Files/Pods-Onesplash/Pods-Onesplash.debug.xcconfig"; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 			children = (
 				774AF88125C149E800359B3F /* PostService.swift */,
 				7721AFEE25D6E22D003C698F /* HomeViewModel.swift */,
+				77DCFD9825D70BBB00EED409 /* SearchViewModel.swift */,
 				774AC74A25BA1D4B002B689F /* HomeViewController.swift */,
 				68FE16B825D4068000EE5B5A /* TabViewController.swift */,
 				68FE16BF25D4086800EE5B5A /* SearchViewController.swift */,
@@ -266,6 +269,7 @@
 				68FE16B925D4068000EE5B5A /* TabViewController.swift in Sources */,
 				774AC74B25BA1D4B002B689F /* HomeViewController.swift in Sources */,
 				680BC0B825D6C5920003D341 /* UsersCustomCell.swift in Sources */,
+				77DCFD9925D70BBB00EED409 /* SearchViewModel.swift in Sources */,
 				774AC74725BA1D4B002B689F /* AppDelegate.swift in Sources */,
 				680BC0A825D697950003D341 /* CollectionService.swift in Sources */,
 				680BC0B525D6C1FB0003D341 /* User.swift in Sources */,
