@@ -30,7 +30,6 @@ class HomeViewController: UIViewController {
     
     // MARK: Layout
     private func layoutUI() {
-//        configureSearchBar()
         configureCollectionView()
     }
     
@@ -53,6 +52,14 @@ class HomeViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    private func createGradient(with frame: CGRect) -> CAGradientLayer {
+        let gradient = CAGradientLayer()
+        gradient.frame = frame
+        gradient.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
+        gradient.locations = [0.1, 1]
+        return gradient
     }
     
     override func viewDidLoad() {
@@ -94,20 +101,14 @@ extension HomeViewController: UICollectionViewDataSource {
             return UIImage(systemName: "picture")
         }
         
-//        postService.image(post: post) { [weak self] data, error  in
-//            guard let img = image(data: data) else { return }
-//            self?.images.append(img)
-//            DispatchQueue.main.async {
-//                cell.cellImageView.image = img
-//                cell.userNameLabel.text = post.user.name
-//                
-//                let gradient = CAGradientLayer()
-//                gradient.frame = cell.cellImageView.bounds
-//                gradient.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
-//                gradient.locations = [0.1, 1]
-//                cell.cellImageView.layer.mask = gradient
-//            }
-//        }
+        viewModel.image(post: post) { [weak self] image, error  in
+            guard let img = image else { return }
+            DispatchQueue.main.async {
+                cell.cellImageView.image = img
+                cell.userNameLabel.text = post.user.name
+                cell.cellImageView.layer.mask = self?.createGradient(with: cell.cellImageView.bounds)
+            }
+        }
         return cell
     }
     

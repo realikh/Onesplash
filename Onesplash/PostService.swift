@@ -43,14 +43,20 @@ class PostService {
         return request
     }
     
-    func posts(pageNumber: Int, completion: @escaping ([Post]?, Error?) -> Void) {
+    func posts(query: String? = nil, pageNumber: Int, completion: @escaping ([Post]?, Error?) -> Void) {
         
         isPaginating = true
         var comp = components()
-        
-        comp.path = "/photos"
-        comp.queryItems = [URLQueryItem(name: "page", value: "\(pageNumber)")]
-        
+        comp.queryItems = []
+        if let query = query {
+            comp.path = "/search/photos"
+            comp.queryItems = [URLQueryItem(name: "query", value: query),
+                               URLQueryItem(name: "page", value: "\(pageNumber)")]
+        } else {
+            comp.path = "/photos"
+            comp.queryItems = [URLQueryItem(name: "page", value: "\(pageNumber)")]
+        }
+    
         let req = request(url: comp.url!)
         
         let task = session.dataTask(with: req) { data, response, error in
@@ -62,8 +68,13 @@ class PostService {
             guard let data = data else { return }
             
             do {
-                let response = try JSONDecoder().decode([Post].self, from: data)
-                completion(response, nil)
+                if let _ = query {
+                    let response = try JSONDecoder().decode(APIResponse.self, from: data)
+                    completion(response.results, nil)
+                } else {
+                    let response = try JSONDecoder().decode([Post].self, from: data)
+                    completion(response, nil)
+                }
                 
                 self.isPaginating = false
                 
@@ -75,48 +86,15 @@ class PostService {
         task.resume()
     }
     
-    func searchPosts(with query: String, completion: @escaping ([Post]?, Error?) -> Void) {
-        var comp = components()
-        
-        comp.path = "/search/photos"
-        comp.queryItems = [URLQueryItem(name: "query", value: query)]
-
-        let req = request(url: comp.url!)
-        
-        let task = session.dataTask(with: req) { data, response, error in
-            if let error = error {
-                completion(nil, error)
-                return
-            }
-            guard let data = data else { return }
-            
-            do {
-                let response = try JSONDecoder().decode(APIResponse.self, from: data)
-                completion(response.results, nil)
-            } catch let error {
-                completion(nil, error)
-            }
-        }
-        
-        task.resume()
-    }
-    
-    private func download(imageURL: URL, completion: @escaping (Data?, Error?) -> (Void)) {
+    func download(post: Post, completion: @escaping (Data?, Error?) -> Void) {
+        guard let imageURL = URL(string: post.urls.regular) else { return }
         let task = session.downloadTask(with: imageURL) { localUrl, response, error in
             if let error = error {
                 completion(nil, error)
                 return
             }
             
-            guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
-                completion(nil, PostServiceError.badResponse(response: response))
-                return
-            }
-            
-            guard let localUrl = localUrl else {
-                completion(nil, PostServiceError.badLocalUrl)
-                return
-            }
+            guard let localUrl = localUrl else { return }
             
             do {
                 let data = try Data(contentsOf: localUrl)
@@ -127,10 +105,5 @@ class PostService {
         }
         
         task.resume()
-    }
-    
-    func image(post: Post, completion: @escaping (Data?, Error?) -> (Void)) {
-        let url = URL(string: post.urls.regular)!
-        download(imageURL: url, completion: completion)
     }
 }

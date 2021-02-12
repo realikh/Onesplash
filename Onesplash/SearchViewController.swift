@@ -11,6 +11,7 @@ class SearchViewController: UIViewController {
     
     private var images = [UIImage]()
     
+    let viewModel = HomeViewModel()
     let postService = PostService.shared
     let collectionService = CollectionService.shared
     let userService = UserService.shared
@@ -24,9 +25,7 @@ class SearchViewController: UIViewController {
     var userResults = [User]()
     
     private var scopeButtonIndex = 0
-    
-    
-    private let vc = HomeViewController()
+
     
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -105,7 +104,7 @@ class SearchViewController: UIViewController {
     }
     
     private func searchPosts(with query: String) {
-        postService.searchPosts(with: query) { [weak self] posts, error in
+        postService.posts(query: query, pageNumber: 1) { [weak self] posts, error in
             if let error = error {
                 print(error.localizedDescription)
                 return
@@ -231,9 +230,9 @@ extension SearchViewController: UICollectionViewDataSource {
                 return UIImage(systemName: "picture")
             }
             
-            postService.image(post: post) { [weak self] data, error  in
-                guard let img = image(data: data) else { return }
-                self?.images.append(img)
+            viewModel.image(post: post) { [weak self] image, error  in
+                guard let img = image else { return }
+                
                 DispatchQueue.main.async {
                     cell.cellImageView.image = img
                     cell.userNameLabel.text = post.user.name
@@ -261,9 +260,8 @@ extension SearchViewController: UICollectionViewDataSource {
                 return UIImage(systemName: "picture")
             }
             
-            postService.image(post: collection.cover_photo) { [weak self] data, error  in
-                guard let img = image(data: data) else { return }
-                self?.images.append(img)
+            viewModel.image(post: collection.cover_photo) { [weak self] image, error  in
+                guard let img = image else { return }
                 DispatchQueue.main.async {
                     cell.collectionImageView.image = img
                     cell.collectionNameLabel.text = collection.title
