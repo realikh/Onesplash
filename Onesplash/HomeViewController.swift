@@ -44,6 +44,14 @@ class HomeViewController: UIViewController {
                                 withReuseIdentifier: String(describing: FooterCollectionReusableView.self))
     }
     
+    private func createGradient(with frame: CGRect) -> CAGradientLayer {
+        let gradient = CAGradientLayer()
+        gradient.frame = frame
+        gradient.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
+        gradient.locations = [0.1, 1]
+        return gradient
+    }
+    
     private func bindViewModel() {
         viewModel.didEndRequest = { indexPaths in
             DispatchQueue.main.async { [weak self] in
@@ -52,14 +60,6 @@ class HomeViewController: UIViewController {
                 }
             }
         }
-    }
-    
-    private func createGradient(with frame: CGRect) -> CAGradientLayer {
-        let gradient = CAGradientLayer()
-        gradient.frame = frame
-        gradient.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
-        gradient.locations = [0.1, 1]
-        return gradient
     }
     
     override func viewDidLoad() {
@@ -79,7 +79,7 @@ class HomeViewController: UIViewController {
         tabBarController?.navigationItem.titleView = .none
     }
 }
-    
+
 
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -130,10 +130,9 @@ extension HomeViewController: UICollectionViewDataSource {
 extension HomeViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // Get the current vertical position of collectionView
-        
         let position = scrollView.contentOffset.y
         let distanceToTheEndOfScrollView = collectionView.contentSize.height - 100 - scrollView.frame.size.height
-        if position > (distanceToTheEndOfScrollView) {
+        if position > distanceToTheEndOfScrollView {
             viewModel.fetchPosts()
         }
     }

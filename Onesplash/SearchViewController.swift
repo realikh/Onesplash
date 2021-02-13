@@ -9,8 +9,6 @@ import SnapKit
 
 class SearchViewController: UIViewController {
     
-    private var images = [UIImage]()
-    
     let viewModel = SearchViewModel()
     let collectionService = CollectionService.shared
     let userService = UserService.shared
@@ -19,12 +17,7 @@ class SearchViewController: UIViewController {
     var collections = [Collection]()
     var users = [User]()
     
-    var results = [Post]()
-    var collectionResult = [Collection]()
-    var userResults = [User]()
-    
     private var scopeButtonIndex = 0
-
     
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -46,13 +39,6 @@ class SearchViewController: UIViewController {
         return collectionView
     }()
     
-    private let flowLayout: UICollectionViewFlowLayout = {
-        let collectionViewFlowLayout = UICollectionViewFlowLayout()
-        collectionViewFlowLayout.minimumLineSpacing = 10
-        collectionViewFlowLayout.minimumInteritemSpacing = 0
-        return collectionViewFlowLayout
-    }()
-    
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.showsScopeBar = true
@@ -63,6 +49,13 @@ class SearchViewController: UIViewController {
         return searchBar
     }()
     
+    private let flowLayout: UICollectionViewFlowLayout = {
+        let collectionViewFlowLayout = UICollectionViewFlowLayout()
+        collectionViewFlowLayout.minimumLineSpacing = 10
+        collectionViewFlowLayout.minimumInteritemSpacing = 0
+        return collectionViewFlowLayout
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "DarkTheme")
@@ -70,14 +63,16 @@ class SearchViewController: UIViewController {
         bindViewModel()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        layoutUI()
-    }
-    
     private func layoutUI() {
         configureSearchBar()
         configureTableView()
         configureCollectionView()
+    }
+    
+    private func configureSearchBar() {
+        searchBar.delegate = self
+        tabBarController?.navigationItem.titleView = searchBar
+        tabBarController?.navigationController?.navigationBar.isTranslucent = false
     }
     
     private func configureTableView() {
@@ -95,12 +90,6 @@ class SearchViewController: UIViewController {
             $0.right.equalTo(view.safeAreaLayoutGuide)
             $0.left.equalTo(view.safeAreaLayoutGuide)
         }
-    }
-    
-    private func configureSearchBar() {
-        searchBar.delegate = self
-        tabBarController?.navigationItem.titleView = searchBar
-        tabBarController?.navigationController?.navigationBar.isTranslucent = false
     }
     
     private func bindViewModel() {
@@ -140,9 +129,9 @@ class SearchViewController: UIViewController {
             }
         }
     }
-    
 }
 
+// MARK: Table View Data Source
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 10
@@ -155,23 +144,20 @@ extension SearchViewController: UITableViewDataSource {
     }
 }
 
+// MARK: Search Bar Delegate
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         tableView.alpha = 0
         collectionView.alpha = 1.0
         switch scopeButtonIndex {
         case 0:
-            
             viewModel.fetchPosts(with: searchBar.text ?? "cats")
-            searchBar.endEditing(true)
         case 1:
             searchCollections(with: searchBar.text!)
-            searchBar.endEditing(true)
         default:
             searchUsers(with: searchBar.text!)
-            searchBar.endEditing(true)
         }
-        
+        searchBar.endEditing(true)
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -179,7 +165,7 @@ extension SearchViewController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText == "" {
+        if searchText.isEmpty {
             tableView.alpha = 1.0
             collectionView.alpha = 0
         }
@@ -282,7 +268,6 @@ extension SearchViewController: UICollectionViewDataSource {
             
             userService.image(user: user) { [weak self] data, error  in
                 guard let img = image(data: data) else { return }
-                self?.images.append(img)
                 DispatchQueue.main.async {
                     cell.userImageView.image = img
                     cell.nameLabel.text = user.name
@@ -291,17 +276,12 @@ extension SearchViewController: UICollectionViewDataSource {
             }
             return cell
         }
-        
     }
 }
 
-
-
-extension SearchViewController: UICollectionViewDelegate {
-    
-}
-
 extension SearchViewController: UICollectionViewDelegateFlowLayout {
+    
+    // MARK: Size for item at index path
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch scopeButtonIndex {
         case 0:
@@ -312,17 +292,19 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
         default:
             return CGSize(width: view.frame.width , height: 100)
         }
-        
     }
 }
 
+
 extension SearchViewController: UIScrollViewDelegate {
+    
+    // MARK: Scroll view did scroll
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // Get the current vertical position of collectionView
         
         let position = scrollView.contentOffset.y
         let distanceToTheEndOfScrollView = collectionView.contentSize.height - 100 - scrollView.frame.size.height
-        if position > (distanceToTheEndOfScrollView) {
+        if position > distanceToTheEndOfScrollView && scopeButtonIndex == 0 {
             viewModel.fetchPosts(with: searchBar.text ?? "cats")
         }
     }

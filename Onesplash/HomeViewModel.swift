@@ -14,7 +14,7 @@ final class HomeViewModel {
     private(set) var posts = [Post]()
     private var pageNumber = 0
     
-    func fetchPosts() {
+    func fetchPosts(query: String? = nil) {
         guard !postService.isPaginating else { print("Fetching Data"); return }
         pageNumber += 1
         postService.posts(pageNumber: pageNumber) { [weak self] posts, error in

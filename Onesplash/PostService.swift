@@ -19,7 +19,7 @@ fileprivate struct APIResponse: Decodable {
 
 class PostService {
     
-    var isPaginating = false
+    private(set) var isPaginating = false
     private let accessKey = "g_bih1OD8GhQVHrcjPPqyo7Ho19HZddWwakzUgjVNuM"
     static var shared = PostService()
     
@@ -48,11 +48,12 @@ class PostService {
         isPaginating = true
         var comp = components()
         comp.queryItems = []
-        if let query = query {
+        
+        if let query = query { // Search posts
             comp.path = "/search/photos"
             comp.queryItems = [URLQueryItem(name: "query", value: query),
                                URLQueryItem(name: "page", value: "\(pageNumber)")]
-        } else {
+        } else { // Posts
             comp.path = "/photos"
             comp.queryItems = [URLQueryItem(name: "page", value: "\(pageNumber)")]
         }
@@ -75,14 +76,11 @@ class PostService {
                     let response = try JSONDecoder().decode([Post].self, from: data)
                     completion(response, nil)
                 }
-                
                 self.isPaginating = false
-                
             } catch let error {
                 completion(nil, error)
             }
         }
-        
         task.resume()
     }
     
@@ -93,9 +91,7 @@ class PostService {
                 completion(nil, error)
                 return
             }
-            
             guard let localUrl = localUrl else { return }
-            
             do {
                 let data = try Data(contentsOf: localUrl)
                 completion(data, nil)
@@ -103,7 +99,6 @@ class PostService {
                 completion(nil, error)
             }
         }
-        
         task.resume()
     }
 }
