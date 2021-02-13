@@ -13,9 +13,6 @@ enum CollectionServiceError: Error {
     case badLocalUrl
 }
 
-fileprivate struct APIResponse: Decodable {
-    let results: [Collection]
-}
 
 class CollectionService {
     
@@ -72,9 +69,9 @@ class CollectionService {
             
             do {
                 let response = try JSONDecoder().decode(APIResponse.self, from: data)
-                completion(response.results, nil)
+//                completion(response.results, nil)
             } catch let error {
-                completion(nil, error)
+//                completion(nil, error)
             }
         }
         

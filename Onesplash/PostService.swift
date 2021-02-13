@@ -13,7 +13,7 @@ enum PostServiceError: Error {
     case badLocalUrl
 }
 
-fileprivate struct APIResponse: Decodable {
+struct APIResponse: Decodable {
     let results: [Post]
 }
 
@@ -47,7 +47,6 @@ class PostService {
         
         isPaginating = true
         var comp = components()
-        comp.queryItems = []
         
         if let query = query { // Search posts
             comp.path = "/search/photos"

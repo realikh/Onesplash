@@ -33,7 +33,6 @@ class HomeViewController: UIViewController {
         configureCollectionView()
     }
     
-    
     private func configureCollectionView() {
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints {
@@ -65,7 +64,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutUI()
-        viewModel.fetchPosts()
+        viewModel.getPosts()
         bindViewModel()
     }
     
@@ -133,7 +132,7 @@ extension HomeViewController: UIScrollViewDelegate {
         let position = scrollView.contentOffset.y
         let distanceToTheEndOfScrollView = collectionView.contentSize.height - 100 - scrollView.frame.size.height
         if position > distanceToTheEndOfScrollView {
-            viewModel.fetchPosts()
+            viewModel.getPosts()
         }
     }
 }

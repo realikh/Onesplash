@@ -13,9 +13,6 @@ enum UserServiceError: Error {
     case badLocalUrl
 }
 
-fileprivate struct APIResponse: Decodable {
-    let results: [User]
-}
 
 class UserService {
     
@@ -72,7 +69,7 @@ class UserService {
             
             do {
                 let response = try JSONDecoder().decode(APIResponse.self, from: data)
-                completion(response.results, nil)
+//                completion(response.results, nil)
             } catch let error {
                 completion(nil, error)
             }

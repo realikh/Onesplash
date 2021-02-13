@@ -8,9 +8,15 @@
 import UIKit
 
 final class SearchViewModel {
-    var didEndRequest: ([IndexPath]) -> Void = { indexPaths in }
+    var didEndPostRequest: ([IndexPath]) -> Void = { indexPaths in }
+    var didEndCollectionRequest: () -> Void = {}
+    var didEndUserRequest: () -> Void = {}
     private let postService = PostService.shared
+    private let collectionService = CollectionService.shared
+    private let userService = UserService.shared
     private(set) var posts = [Post]()
+    private(set) var collections = [Collection]()
+    private(set) var users = [User]()
     private var pageNumber = 0
     private var query = "cats"
     
@@ -25,7 +31,7 @@ final class SearchViewModel {
         postService.posts(query: query, pageNumber: pageNumber) { [weak self] posts, error in
             guard let posts = posts, self != nil else { return }
             self!.posts.append(contentsOf: posts)
-            self!.didEndRequest((self?.getInsertionIndexPaths(for: self!.pageNumber))!)
+            self!.didEndPostRequest((self?.getInsertionIndexPaths(for: self!.pageNumber))!)
         }
     }
     

@@ -10,12 +10,8 @@ import SnapKit
 class SearchViewController: UIViewController {
     
     let viewModel = SearchViewModel()
-    let collectionService = CollectionService.shared
-    let userService = UserService.shared
-    
-    var posts = [Post]()
-    var collections = [Collection]()
-    var users = [User]()
+    let userService = UserService()
+    let collectionService = CollectionService()
     
     private var scopeButtonIndex = 0
     
@@ -28,7 +24,7 @@ class SearchViewController: UIViewController {
     
     private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
-        collectionView.dataSource = self
+//        collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(PostsCustomCell.self, forCellWithReuseIdentifier: String(describing: PostsCustomCell.self))
         collectionView.register(CollectionsCustomCell.self, forCellWithReuseIdentifier: String(describing: CollectionsCustomCell.self))
@@ -93,43 +89,27 @@ class SearchViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        viewModel.didEndRequest = { indexPaths in
+        viewModel.didEndPostRequest = { indexPaths in
             DispatchQueue.main.async { [weak self] in
                 self?.collectionView.performBatchUpdates { [weak self] in
                     self?.collectionView.insertItems(at: indexPaths)
                 }
             }
         }
-    }
-    
-    private func searchCollections(with query: String) {
-        collectionService.searchCollections(with: query) { [weak self] collections, error in
-            if let error = error {
-                print(error.localizedDescription)
-                return
+        viewModel.didEndCollectionRequest = {
+            DispatchQueue.main.async { [weak self] in
+                self?.collectionView.reloadData()
             }
-            
-            self?.collections = collections!
-            DispatchQueue.main.async {
+           
+        }
+
+        viewModel.didEndUserRequest = {
+            DispatchQueue.main.async { [weak self] in
                 self?.collectionView.reloadData()
             }
         }
     }
-    
-    private func searchUsers(with query: String) {
-        userService.searchUsers(with: query) { [weak self] users, error in
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-            
-            self?.users = users!
-            DispatchQueue.main.async {
-                self?.collectionView.reloadData()
-            }
-        }
     }
-}
 
 // MARK: Table View Data Source
 extension SearchViewController: UITableViewDataSource {
@@ -153,9 +133,11 @@ extension SearchViewController: UISearchBarDelegate {
         case 0:
             viewModel.fetchPosts(with: searchBar.text ?? "cats")
         case 1:
-            searchCollections(with: searchBar.text!)
+//            viewModel.searchCollections(with: searchBar.text!)
+            break
         default:
-            searchUsers(with: searchBar.text!)
+            //            viewModel(with: searchBar.text!)
+            break
         }
         searchBar.endEditing(true)
     }
@@ -177,107 +159,111 @@ extension SearchViewController: UISearchBarDelegate {
         case 0:
             viewModel.fetchPosts(with: searchBar.text ?? "cats")
         case 1:
-            searchCollections(with: searchBar.text!)
+//            searchCollections(with: searchBar.text!)
+        break
         default:
-            searchUsers(with: searchBar.text!)
+//            searchUsers(with: searchBar.text!)
+        break
         }
     }
 }
 
-extension SearchViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch scopeButtonIndex {
-        case 0:
-            return viewModel.posts.count
-        case 1:
-            return collections.count
-        default:
-            return users.count
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        switch scopeButtonIndex {
-        case 0:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PostsCustomCell.self),
-                                                          for: indexPath) as! PostsCustomCell
-            let post = viewModel.posts[indexPath.row]
-            
-            cell.cellImageView.image = nil
-            cell.cellImageView.backgroundColor = UIColor(hex: post.color)
-            
-            func image(data: Data?) -> UIImage? {
-                if let data = data {
-                    return UIImage(data: data)
-                }
-                return UIImage(systemName: "picture")
-            }
-            
-            viewModel.image(post: post) { [weak self] image, error  in
-                guard let img = image else { return }
-                
-                DispatchQueue.main.async {
-                    cell.cellImageView.image = img
-                    cell.userNameLabel.text = post.user.name
-                    
-                    let gradient = CAGradientLayer()
-                    gradient.frame = cell.cellImageView.bounds
-                    gradient.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
-                    gradient.locations = [0.1, 1]
-                    cell.cellImageView.layer.mask = gradient
-                }
-            }
-            return cell
-        case 1:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CollectionsCustomCell.self),
-                                                          for: indexPath) as! CollectionsCustomCell
-            let collection = collections[indexPath.row]
-            
-            cell.collectionImageView.image = nil
-            cell.collectionImageView.backgroundColor = UIColor(hex: collection.cover_photo.color)
-            
-            func image(data: Data?) -> UIImage? {
-                if let data = data {
-                    return UIImage(data: data)
-                }
-                return UIImage(systemName: "picture")
-            }
-            
-            viewModel.image(post: collection.cover_photo) { [weak self] image, error  in
-                guard let img = image else { return }
-                DispatchQueue.main.async {
-                    cell.collectionImageView.image = img
-                    cell.collectionNameLabel.text = collection.title
-                }
-            }
-            return cell
-        default:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: UsersCustomCell.self),
-                                                          for: indexPath) as! UsersCustomCell
-            let user = users[indexPath.row]
-            
-            cell.userImageView.image = nil
-            cell.userImageView.backgroundColor = UIColor(hex: user.profile_image.medium)
-            
-            func image(data: Data?) -> UIImage? {
-                if let data = data {
-                    return UIImage(data: data)
-                }
-                return UIImage(systemName: "picture")
-            }
-            
-            userService.image(user: user) { [weak self] data, error  in
-                guard let img = image(data: data) else { return }
-                DispatchQueue.main.async {
-                    cell.userImageView.image = img
-                    cell.nameLabel.text = user.name
-                    cell.userNameLabel.text = user.username
-                }
-            }
-            return cell
-        }
-    }
-}
+//extension SearchViewController: UICollectionViewDataSource {
+//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+//        switch scopeButtonIndex {
+//        case 0:
+//            return viewModel.posts.count
+//        case 1:
+////            return collections.count
+//            break
+//        default:
+////            return users.count
+//        break
+//        }
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+//        switch scopeButtonIndex {
+//        case 0:
+//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PostsCustomCell.self),
+//                                                          for: indexPath) as! PostsCustomCell
+//            let post = viewModel.posts[indexPath.row]
+//
+//            cell.cellImageView.image = nil
+//            cell.cellImageView.backgroundColor = UIColor(hex: post.color)
+//
+//            func image(data: Data?) -> UIImage? {
+//                if let data = data {
+//                    return UIImage(data: data)
+//                }
+//                return UIImage(systemName: "picture")
+//            }
+//
+//            viewModel.image(post: post) { [weak self] image, error  in
+//                guard let img = image else { return }
+//
+//                DispatchQueue.main.async {
+//                    cell.cellImageView.image = img
+//                    cell.userNameLabel.text = post.user.name
+//
+//                    let gradient = CAGradientLayer()
+//                    gradient.frame = cell.cellImageView.bounds
+//                    gradient.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
+//                    gradient.locations = [0.1, 1]
+//                    cell.cellImageView.layer.mask = gradient
+//                }
+//            }
+//            return cell
+//        case 1:
+//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CollectionsCustomCell.self),
+//                                                          for: indexPath) as! CollectionsCustomCell
+//            let collection = collections[indexPath.row]
+//
+//            cell.collectionImageView.image = nil
+//            cell.collectionImageView.backgroundColor = UIColor(hex: collection.cover_photo.color)
+//
+//            func image(data: Data?) -> UIImage? {
+//                if let data = data {
+//                    return UIImage(data: data)
+//                }
+//                return UIImage(systemName: "picture")
+//            }
+//
+//            viewModel.image(post: collection.cover_photo) { [weak self] image, error  in
+//                guard let img = image else { return }
+//                DispatchQueue.main.async {
+//                    cell.collectionImageView.image = img
+//                    cell.collectionNameLabel.text = collection.title
+//                }
+//            }
+//            return cell
+//        default:
+//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: UsersCustomCell.self),
+//                                                          for: indexPath) as! UsersCustomCell
+//            let user = users[indexPath.row]
+//
+//            cell.userImageView.image = nil
+//            cell.userImageView.backgroundColor = UIColor(hex: user.profile_image.medium)
+//
+//            func image(data: Data?) -> UIImage? {
+//                if let data = data {
+//                    return UIImage(data: data)
+//                }
+//                return UIImage(systemName: "picture")
+//            }
+//
+//            userService.image(user: user) { [weak self] data, error  in
+//                guard let img = image(data: data) else { return }
+//                DispatchQueue.main.async {
+//                    cell.userImageView.image = img
+//                    cell.nameLabel.text = user.name
+//                    cell.userNameLabel.text = user.username
+//                }
+//            }
+//            return cell
+//        }
+//    }
+//}
 
 extension SearchViewController: UICollectionViewDelegateFlowLayout {
     
