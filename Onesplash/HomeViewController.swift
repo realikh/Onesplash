@@ -89,18 +89,10 @@ extension HomeViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PostsCustomCell.self),
                                                       for: indexPath) as! PostsCustomCell
         let post = viewModel.posts[indexPath.row]
-        
         cell.cellImageView.image = nil
         cell.cellImageView.backgroundColor = UIColor(hex: post.color)
         
-        func image(data: Data?) -> UIImage? {
-            if let data = data {
-                return UIImage(data: data)
-            }
-            return UIImage(systemName: "picture")
-        }
-        
-        viewModel.image(post: post) { [weak self] image, error  in
+        viewModel.image(url: post.urls.regular) { [weak self] image, error  in
             guard let img = image else { return }
             DispatchQueue.main.async {
                 cell.cellImageView.image = img

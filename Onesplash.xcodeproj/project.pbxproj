@@ -8,10 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		651F8D09FD190DFE7130107A /* Pods_Onesplash.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09B8999C3B0ABBC8BBEC808F /* Pods_Onesplash.framework */; };
-		680BC0A825D697950003D341 /* CollectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680BC0A725D697950003D341 /* CollectionService.swift */; };
 		680BC0AB25D698720003D341 /* Collection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680BC0AA25D698720003D341 /* Collection.swift */; };
 		680BC0AE25D69F480003D341 /* CollectionsCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680BC0AD25D69F480003D341 /* CollectionsCustomCell.swift */; };
-		680BC0B225D6C1D30003D341 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680BC0B125D6C1D30003D341 /* UserService.swift */; };
 		680BC0B525D6C1FB0003D341 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680BC0B425D6C1FB0003D341 /* User.swift */; };
 		680BC0B825D6C5920003D341 /* UsersCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 680BC0B725D6C5920003D341 /* UsersCustomCell.swift */; };
 		68CA866825C41ADB00192321 /* PostsCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68CA866725C41ADB00192321 /* PostsCustomCell.swift */; };
@@ -27,7 +25,6 @@
 		774AC75125BA1D4B002B689F /* Onesplash.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 774AC74F25BA1D4B002B689F /* Onesplash.xcdatamodeld */; };
 		774AC75325BA1D4F002B689F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 774AC75225BA1D4F002B689F /* Assets.xcassets */; };
 		774AC75625BA1D4F002B689F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 774AC75425BA1D4F002B689F /* LaunchScreen.storyboard */; };
-		774AF88225C149E800359B3F /* PostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 774AF88125C149E800359B3F /* PostService.swift */; };
 		7765983E25D520BD00D0ACD9 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7765983D25D520BD00D0ACD9 /* UIColor.swift */; };
 		77DCFD9925D70BBB00EED409 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DCFD9825D70BBB00EED409 /* SearchViewModel.swift */; };
 		77E0D5E625BB15690053C7A8 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E0D5E525BB15690053C7A8 /* Post.swift */; };
@@ -35,10 +32,8 @@
 
 /* Begin PBXFileReference section */
 		09B8999C3B0ABBC8BBEC808F /* Pods_Onesplash.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Onesplash.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		680BC0A725D697950003D341 /* CollectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionService.swift; sourceTree = "<group>"; };
 		680BC0AA25D698720003D341 /* Collection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collection.swift; sourceTree = "<group>"; };
 		680BC0AD25D69F480003D341 /* CollectionsCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsCustomCell.swift; sourceTree = "<group>"; };
-		680BC0B125D6C1D30003D341 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		680BC0B425D6C1FB0003D341 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		680BC0B725D6C5920003D341 /* UsersCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersCustomCell.swift; sourceTree = "<group>"; };
 		68CA866725C41ADB00192321 /* PostsCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsCustomCell.swift; sourceTree = "<group>"; };
@@ -56,7 +51,6 @@
 		774AC75225BA1D4F002B689F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		774AC75525BA1D4F002B689F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		774AC75725BA1D4F002B689F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		774AF88125C149E800359B3F /* PostService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostService.swift; sourceTree = "<group>"; };
 		7765983D25D520BD00D0ACD9 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		77DCFD9825D70BBB00EED409 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		77E0D5E525BB15690053C7A8 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
@@ -105,7 +99,6 @@
 		774AC74525BA1D4B002B689F /* Onesplash */ = {
 			isa = PBXGroup;
 			children = (
-				774AF88125C149E800359B3F /* PostService.swift */,
 				7742F09E25D7DA0D009DB5A1 /* Endpoint.swift */,
 				7742F0A125D7E061009DB5A1 /* NetworkEngine.swift */,
 				7721AFEE25D6E22D003C698F /* HomeViewModel.swift */,
@@ -122,10 +115,8 @@
 				7765983725D51D5D00D0ACD9 /* Supporting Files */,
 				774AC75725BA1D4F002B689F /* Info.plist */,
 				774AC74F25BA1D4B002B689F /* Onesplash.xcdatamodeld */,
-				680BC0A725D697950003D341 /* CollectionService.swift */,
 				680BC0AA25D698720003D341 /* Collection.swift */,
 				680BC0AD25D69F480003D341 /* CollectionsCustomCell.swift */,
-				680BC0B125D6C1D30003D341 /* UserService.swift */,
 				680BC0B425D6C1FB0003D341 /* User.swift */,
 				680BC0B725D6C5920003D341 /* UsersCustomCell.swift */,
 			);
@@ -278,17 +269,14 @@
 				680BC0B825D6C5920003D341 /* UsersCustomCell.swift in Sources */,
 				77DCFD9925D70BBB00EED409 /* SearchViewModel.swift in Sources */,
 				774AC74725BA1D4B002B689F /* AppDelegate.swift in Sources */,
-				680BC0A825D697950003D341 /* CollectionService.swift in Sources */,
 				680BC0B525D6C1FB0003D341 /* User.swift in Sources */,
 				68FE16C025D4086800EE5B5A /* SearchViewController.swift in Sources */,
-				774AF88225C149E800359B3F /* PostService.swift in Sources */,
 				680BC0AB25D698720003D341 /* Collection.swift in Sources */,
 				68CA866825C41ADB00192321 /* PostsCustomCell.swift in Sources */,
 				774AC74925BA1D4B002B689F /* SceneDelegate.swift in Sources */,
 				774AC75125BA1D4B002B689F /* Onesplash.xcdatamodeld in Sources */,
 				7742F09F25D7DA0D009DB5A1 /* Endpoint.swift in Sources */,
 				77474F8A25D4425500D75C78 /* FooterCollectionReusableView.swift in Sources */,
-				680BC0B225D6C1D30003D341 /* UserService.swift in Sources */,
 				77E0D5E625BB15690053C7A8 /* Post.swift in Sources */,
 				680BC0AE25D69F480003D341 /* CollectionsCustomCell.swift in Sources */,
 				7765983E25D520BD00D0ACD9 /* UIColor.swift in Sources */,

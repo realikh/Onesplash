@@ -7,12 +7,8 @@
 
 import UIKit
 
-final class SearchViewModel {
-//    var didEndPostRequest: ([IndexPath]) -> Void = { indexPaths in }
-    var didEndRequest: () -> Void = {}
-    private let postService = PostService.shared
-    private let collectionService = CollectionService.shared
-    private let userService = UserService.shared
+final class SearchViewModel: ViewModel {
+    var didEndRequest: ([IndexPath]) -> Void = {_ in}
     private(set) var results = [Decodable]()
     private(set) var isPaginating = false
     private var pageNumber = 0
@@ -23,41 +19,38 @@ final class SearchViewModel {
         isPaginating = true
         pageNumber += 1
         NetworkEngine.request(endpoint:
-                                UnsplashEndpoint.getSearchResults(searchText: query,
-                                                                  page: 1,
+                                UnsplashEndpoint
+                                .getSearchResults(searchText: query,
+                                                                  page: pageNumber,
                                                                   dataType: String(describing: T.self
                                                                           )))
         { (response: Result<APIResponse<T>, Error>) in
             switch response {
             case .success(let response):
                 self.results.append(contentsOf: response.results)
-                self.didEndRequest()
+                self.didEndRequest(self.getInsertionIndexPaths(for: self.pageNumber))
                 self.isPaginating = false
-            default:
+            case .failure:
                 self.isPaginating = false
             }
         }
     }
-        
-    func image(post: Post, completion: @escaping (UIImage?, Error?) -> Void) {
-        postService.download(post: post) { data, error in
-            guard let data = data else { return }
-            let image = UIImage(data: data)
-            completion(image, nil)
-        }
-    }
     
-    private func getInsertionIndexPaths(for pageNumber: Int) -> [IndexPath] {
-        var indexPaths = [IndexPath]()
-        for index in (pageNumber - 1) * 10...(pageNumber * 10 - 1) {
-            indexPaths.append(IndexPath(item: index, section: 0))
+    func fetchData(searchText: String, scopeButtonIndex: Int) {
+        switch scopeButtonIndex {
+        case 0:
+            fetchData(with: searchText, type: Post.self)
+        case 1:
+            fetchData(with: searchText, type: Collection.self)
+        case 2:
+            fetchData(with: searchText, type: User.self)
+        default:
+            break
         }
-        return indexPaths
     }
     
     func newQuery() {
         pageNumber = 0
         results = []
-        didEndRequest()
     }
 }

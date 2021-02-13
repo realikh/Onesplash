@@ -7,10 +7,32 @@
 
 import UIKit
 
-final class HomeViewModel {
+protocol ViewModel {
+    
+}
+
+extension ViewModel {
+    func image(url: String, completion: @escaping (UIImage?, Error?) -> Void) {
+        NetworkEngine.download(urlString: url) { data, error in
+            guard error == nil else { print(error?.localizedDescription ?? "Unknown"); return }
+            guard let data = data else { return }
+            let image = UIImage(data: data)
+            completion(image, nil)
+        }
+    }
+    
+    func getInsertionIndexPaths(for pageNumber: Int) -> [IndexPath] {
+        var indexPaths = [IndexPath]()
+        for index in (pageNumber - 1) * 10...(pageNumber * 10 - 1) {
+            indexPaths.append(IndexPath(item: index, section: 0))
+        }
+        return indexPaths
+    }
+}
+
+final class HomeViewModel: ViewModel {
     
     var didEndRequest: ([IndexPath]) -> Void = { indexPaths in }
-    private let postService = PostService.shared
     private(set) var posts = [Post]()
     private var pageNumber = 0
     private var isPaginating = false
@@ -31,21 +53,5 @@ final class HomeViewModel {
                 break
             }
         }
-    }
-    
-    func image(post: Post, completion: @escaping (UIImage?, Error?) -> Void) {
-        postService.download(post: post) { data, error in
-            guard let data = data else { return }
-            let image = UIImage(data: data)
-            completion(image, nil)
-        }
-    }
-    
-    private func getInsertionIndexPaths(for pageNumber: Int) -> [IndexPath] {
-        var indexPaths = [IndexPath]()
-        for index in (pageNumber - 1) * 10...(pageNumber * 10 - 1) {
-            indexPaths.append(IndexPath(item: index, section: 0))
-        }
-        return indexPaths
     }
 }

@@ -8,10 +8,11 @@
 import SnapKit
 
 class SearchViewController: UIViewController {
-    
+
     let viewModel = SearchViewModel()
 
     private var scopeButtonIndex = 0
+    private var searchText = ""
     
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -95,9 +96,11 @@ class SearchViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        viewModel.didEndRequest = {
+        viewModel.didEndRequest = { [weak self] indexPaths in
             DispatchQueue.main.async { [weak self] in
-                self?.collectionView.reloadData()
+                self?.collectionView.performBatchUpdates {
+                    self?.collectionView.insertItems(at: indexPaths)
+                }
             }
         }
     }
@@ -106,7 +109,7 @@ class SearchViewController: UIViewController {
 // MARK: Table View Data Source
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return viewModel.results.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -120,18 +123,12 @@ extension SearchViewController: UITableViewDataSource {
 extension SearchViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchText = searchBar.text ?? "cats"
+        collectionView.setContentOffset(.zero, animated: true)
         tableView.alpha = 0
         collectionView.alpha = 1.0
-        switch scopeButtonIndex {
-        case 0:
-            viewModel.fetchData(with: searchBar.text!, type: Post.self)
-        case 1:
-            viewModel.fetchData(with: searchBar.text!, type: Collection.self)
-        case 2:
-            viewModel.fetchData(with: searchBar.text!, type: User.self)
-        default:
-            break
-        }
+        viewModel.newQuery()
+        viewModel.fetchData(searchText: searchText, scopeButtonIndex: scopeButtonIndex)
         searchBar.endEditing(true)
     }
     
@@ -144,7 +141,9 @@ extension SearchViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         viewModel.newQuery()
+        collectionView.reloadData()
         scopeButtonIndex = selectedScope
+        viewModel.fetchData(searchText: searchText, scopeButtonIndex: scopeButtonIndex)
     }
 }
 
@@ -162,7 +161,7 @@ extension SearchViewController: UICollectionViewDataSource {
             cell.cellImageView.image = nil
             cell.cellImageView.backgroundColor = UIColor(hex: post.color)
 
-            viewModel.image(post: post) { [weak self] image, error  in
+            viewModel.image(url: post.urls.regular) { [weak self] image, error  in
                 guard let img = image else { return }
                 DispatchQueue.main.async {
                     cell.cellImageView.image = img
@@ -178,7 +177,7 @@ extension SearchViewController: UICollectionViewDataSource {
 
             cell.collectionImageView.image = nil
 
-            viewModel.image(post: collection.cover_photo) { [weak self] image, error  in
+            viewModel.image(url: collection.cover_photo.urls.regular) { image, error  in
                 guard let img = image else { return }
                 DispatchQueue.main.async {
                     cell.collectionImageView.image = img
@@ -193,14 +192,14 @@ extension SearchViewController: UICollectionViewDataSource {
             cell.userImageView.image = nil
             cell.userImageView.backgroundColor = UIColor(hex: user.profile_image.medium)
             
-//            viewModel.image(user: user) { [weak self] image, error  in
-//                guard let img = image else { return }
+            viewModel.image(url: user.profile_image.medium) { image, error  in
+                guard let img = image else { return }
                 DispatchQueue.main.async {
-                    cell.userImageView.image = UIImage(systemName: "picture")
+                    cell.userImageView.image = img
                     cell.nameLabel.text = user.name
                     cell.userNameLabel.text = user.username
                 }
-//            }
+            }
             return cell
         }
     }
@@ -231,8 +230,8 @@ extension SearchViewController: UIScrollViewDelegate {
         
         let position = scrollView.contentOffset.y
         let distanceToTheEndOfScrollView = collectionView.contentSize.height - 100 - scrollView.frame.size.height
-        if position > distanceToTheEndOfScrollView && scopeButtonIndex == 0 {
-            viewModel.fetchPosts(with: searchBar.text ?? "cats")
+        if position > distanceToTheEndOfScrollView {
+            viewModel.fetchData(searchText: searchText, scopeButtonIndex: scopeButtonIndex)
         }
     }
     
