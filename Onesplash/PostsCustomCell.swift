@@ -6,6 +6,7 @@
 //
 
 import SnapKit
+import ImageViewer_swift
 
 class PostsCustomCell: UICollectionViewCell {
     

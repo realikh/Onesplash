@@ -90,6 +90,9 @@ extension ExpandedCollectionViewController: UICollectionViewDataSource {
             DispatchQueue.main.async {
                 cell.cellImageView.image = img
                 cell.userNameLabel.text = post.user.name
+                cell.cellImageView.setupImageViewer(options: [.theme(.dark), .rightNavItemTitle("Download", onTap: { (Int) in
+                    print("download")
+                })], from: self)
                 
                 let gradient = CAGradientLayer()
                 gradient.frame = cell.cellImageView.bounds

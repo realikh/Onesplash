@@ -6,6 +6,7 @@
 //
 
 import SnapKit
+import ImageViewer_swift
 
 class HomeViewController: UIViewController {
     
@@ -90,6 +91,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         layoutUI()
         fetchPosts()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -149,6 +151,11 @@ extension HomeViewController: UICollectionViewDataSource {
             DispatchQueue.main.async {
                 cell.cellImageView.image = img
                 cell.userNameLabel.text = post.user.name
+                cell.cellImageView.setupImageViewer()
+                cell.cellImageView.setupImageViewer(options: [.theme(.dark), .rightNavItemTitle("Download", onTap: { (Int) in
+                    print("download")
+                })], from: self)
+                
                 
                 let gradient = CAGradientLayer()
                 gradient.frame = cell.cellImageView.bounds
@@ -157,6 +164,7 @@ extension HomeViewController: UICollectionViewDataSource {
                 cell.cellImageView.layer.mask = gradient
             }
         }
+        
         return cell
     }
     
@@ -226,24 +234,10 @@ extension HomeViewController: UISearchBarDelegate {
         searchBar.endEditing(true)
     }
 }
-//Test
+
 //extension HomeViewController: UICollectionViewDelegate {
 //    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let post = posts[indexPath.row]
-//        func image(data: Data?) -> UIImage? {
-//            if let data = data {
-//                return UIImage(data: data)
-//            }
-//            return UIImage(systemName: "picture")
-//        }
 //
-//        postService.image(post: post) { [weak self] data, error  in
-//            guard let img = image(data: data) else { return }
-//            self?.images.append(img)
-//            DispatchQueue.main.async {
-//                self!.imageTapped(img)
-//            }
-//        }
 //    }
 //}
 

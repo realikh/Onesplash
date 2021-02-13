@@ -23,15 +23,18 @@ class SearchViewController: UIViewController {
     var collectionResult = [Collection]()
     var userResults = [User]()
     
+    private var recentSearches = [String]()
+    
     private var scopeButtonIndex = 0
     
     
     private let vc = HomeViewController()
     
     private let tableView: UITableView = {
-        let tableView = UITableView()
+        let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.backgroundColor = UIColor(named: "DarkTheme")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: String(describing: UITableViewCell.self))
         return tableView
     }()
     
@@ -62,6 +65,8 @@ class SearchViewController: UIViewController {
         searchBar.scopeButtonTitles = ["Photos", "Collections", "Users"]
         searchBar.barTintColor = UIColor(named: "DarkTheme")
         searchBar.backgroundColor = UIColor(named: "DarkTheme")
+        let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
+        textFieldInsideSearchBar?.textColor = .white
         return searchBar
     }()
     
@@ -69,6 +74,8 @@ class SearchViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "DarkTheme")
         layoutUI()
+        tableView.dataSource = self
+        tableView.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -151,20 +158,55 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return recentSearches.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reusableCell", for: indexPath)
-        cell.textLabel?.text = "Test"
+        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: UITableViewCell.self), for: indexPath)
+        cell.textLabel?.text = recentSearches[indexPath.row]
+        cell.backgroundColor = UIColor(named: "DarkTheme")
+        cell.textLabel?.textColor = .white
         return cell
     }
+}
+
+extension SearchViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = CustomSearchHeaderView()
+        return view
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.alpha = 0
+        collectionView.alpha = 1.0
+        searchBar.text = recentSearches[indexPath.row]
+        tableView.deselectRow(at: indexPath, animated: true)
+        switch scopeButtonIndex {
+        case 0:
+            searchPosts(with: searchBar.text!)
+            searchBar.endEditing(true)
+        case 1:
+            searchCollections(with: searchBar.text!)
+            searchBar.endEditing(true)
+        default:
+            searchUsers(with: searchBar.text!)
+            searchBar.endEditing(true)
+        }
+    }
+      
 }
 
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         tableView.alpha = 0
         collectionView.alpha = 1.0
+        recentSearches.append(searchBar.text!)
+        tableView.reloadData()
         switch scopeButtonIndex {
         case 0:
             searchPosts(with: searchBar.text!)
@@ -238,6 +280,9 @@ extension SearchViewController: UICollectionViewDataSource {
                 DispatchQueue.main.async {
                     cell.cellImageView.image = img
                     cell.userNameLabel.text = post.user.name
+                    cell.cellImageView.setupImageViewer(options: [.theme(.dark), .rightNavItemTitle("Download", onTap: { (Int) in
+                        print("download")
+                    })], from: self)
                     
                     let gradient = CAGradientLayer()
                     gradient.frame = cell.cellImageView.bounds
