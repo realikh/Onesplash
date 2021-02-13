@@ -21,7 +21,6 @@ final class NetworkEngine {
         
         var urlRequest = URLRequest(url: url)
         urlRequest.addValue("Client-ID \(accessKey)", forHTTPHeaderField: "Authorization")
-//        urlRequest.httpMethod = endpoint.method
         
         let session = URLSession(configuration: .default)
         let dataTask = session.dataTask(with: urlRequest) { data, response, error in
@@ -37,8 +36,7 @@ final class NetworkEngine {
             if let responseObject = try? JSONDecoder().decode(T.self, from: data) {
                 completion(.success(responseObject))
             } else {
-                let error = NSError(domain: "", code: 200, userInfo: [NSLocalizedDescriptionKey: "response"])
-                print(error.localizedDescription)
+                print("Error")
             }
         }
         dataTask.resume()

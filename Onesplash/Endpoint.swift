@@ -12,13 +12,12 @@ protocol Endpoint {
     var baseURL: String { get }
     var path: String { get }
     var parameters: [URLQueryItem] { get }
-//    var method: String { get }
 }
 
 enum UnsplashEndpoint: Endpoint {
     
-    case getResults(page: Int)
-    case getSearchResults(searchText: String, page: Int)
+    case getPostResults(page: Int)
+    case getSearchResults(searchText: String, page: Int, dataType: String)
     
     var scheme: String {
         switch self {
@@ -36,26 +35,29 @@ enum UnsplashEndpoint: Endpoint {
     
     var path: String {
         switch self {
-        case .getResults:
+        case .getPostResults:
             return "/photos"
-        case .getSearchResults:
-            return "/search/photos"
+        case .getSearchResults( _, _, let dataType):
+            switch dataType {
+            case String(describing: Post.self):
+                return "/search/photos"
+            case String(describing: Collection.self):
+                return "/search/collections"
+            case String(describing: User.self):
+                return "/search/users"
+            default:
+                return "/photos"
+            }
         }
     }
     
     var parameters: [URLQueryItem] {
         switch self {
-        case .getResults(let page):
+        case .getPostResults(let page):
             return [URLQueryItem(name: "page", value: "\(page)")]
-        case .getSearchResults(let searchText, let page):
+        case .getSearchResults(let searchText, let page, _):
             return [URLQueryItem(name: "page", value: "\(page)"),
                     URLQueryItem(name: "query", value: searchText)]
         }
     }
-//    
-//    var method: String {
-//        switch self {
-//        default: return "GET"
-//        }
-//    }
 }

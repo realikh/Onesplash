@@ -64,7 +64,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         layoutUI()
-        viewModel.getPosts()
+        viewModel.fetchPosts()
         bindViewModel()
     }
     
@@ -132,7 +132,7 @@ extension HomeViewController: UIScrollViewDelegate {
         let position = scrollView.contentOffset.y
         let distanceToTheEndOfScrollView = collectionView.contentSize.height - 100 - scrollView.frame.size.height
         if position > distanceToTheEndOfScrollView {
-            viewModel.getPosts()
+            viewModel.fetchPosts()
         }
     }
 }

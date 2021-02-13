@@ -68,7 +68,7 @@ class UserService {
             }
             
             do {
-                let response = try JSONDecoder().decode(APIResponse.self, from: data)
+                let response = try JSONDecoder().decode(APIResponse<User>.self, from: data)
 //                completion(response.results, nil)
             } catch let error {
                 completion(nil, error)

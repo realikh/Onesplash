@@ -8,33 +8,37 @@
 import UIKit
 
 final class SearchViewModel {
-    var didEndPostRequest: ([IndexPath]) -> Void = { indexPaths in }
-    var didEndCollectionRequest: () -> Void = {}
-    var didEndUserRequest: () -> Void = {}
+//    var didEndPostRequest: ([IndexPath]) -> Void = { indexPaths in }
+    var didEndRequest: () -> Void = {}
     private let postService = PostService.shared
     private let collectionService = CollectionService.shared
     private let userService = UserService.shared
-    private(set) var posts = [Post]()
-    private(set) var collections = [Collection]()
-    private(set) var users = [User]()
+    private(set) var results = [Decodable]()
+    private(set) var isPaginating = false
     private var pageNumber = 0
     private var query = "cats"
     
-    func fetchPosts(with query: String) {
-        if query.lowercased() != self.query.lowercased() {
-            pageNumber = 0
-            posts = []
-            self.query = query
-        }
-        guard !postService.isPaginating else { print("Fetching Data"); return }
+    func fetchData<T: Decodable>(with query: String, type: T.Type) {
+        guard !isPaginating else { print("Fetching data already"); return }
+        isPaginating = true
         pageNumber += 1
-        postService.posts(query: query, pageNumber: pageNumber) { [weak self] posts, error in
-            guard let posts = posts, self != nil else { return }
-            self!.posts.append(contentsOf: posts)
-            self!.didEndPostRequest((self?.getInsertionIndexPaths(for: self!.pageNumber))!)
+        NetworkEngine.request(endpoint:
+                                UnsplashEndpoint.getSearchResults(searchText: query,
+                                                                  page: 1,
+                                                                  dataType: String(describing: T.self
+                                                                          )))
+        { (response: Result<APIResponse<T>, Error>) in
+            switch response {
+            case .success(let response):
+                self.results.append(contentsOf: response.results)
+                self.didEndRequest()
+                self.isPaginating = false
+            default:
+                self.isPaginating = false
+            }
         }
     }
-    
+        
     func image(post: Post, completion: @escaping (UIImage?, Error?) -> Void) {
         postService.download(post: post) { data, error in
             guard let data = data else { return }
@@ -49,5 +53,11 @@ final class SearchViewModel {
             indexPaths.append(IndexPath(item: index, section: 0))
         }
         return indexPaths
+    }
+    
+    func newQuery() {
+        pageNumber = 0
+        results = []
+        didEndRequest()
     }
 }

@@ -13,9 +13,7 @@ enum PostServiceError: Error {
     case badLocalUrl
 }
 
-struct APIResponse: Decodable {
-    let results: [Post]
-}
+
 
 class PostService {
     
@@ -69,7 +67,7 @@ class PostService {
             
             do {
                 if let _ = query {
-                    let response = try JSONDecoder().decode(APIResponse.self, from: data)
+                    let response = try JSONDecoder().decode(APIResponse<Post>.self, from: data)
                     completion(response.results, nil)
                 } else {
                     let response = try JSONDecoder().decode([Post].self, from: data)

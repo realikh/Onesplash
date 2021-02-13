@@ -15,28 +15,19 @@ final class HomeViewModel {
     private var pageNumber = 0
     private var isPaginating = false
     
-//    func fetchPosts(query: String? = nil) {
-//        guard !postService.isPaginating else { print("Fetching Data"); return }
-//        pageNumber += 1
-//        postService.posts(pageNumber: pageNumber) { [weak self] posts, error in
-//            guard let posts = posts, self != nil else { return }
-//            self!.posts.append(contentsOf: posts)
-//            self!.didEndRequest((self?.getInsertionIndexPaths(for: self!.pageNumber))!)
-//        }
-//    }
-    
-    func getPosts() {
-        guard !isPaginating else { print("Already fetching data"); return }
+    func fetchPosts() {
+        // If data is fetching already
+        guard !isPaginating else { print("Already fetching data"); return } //
         isPaginating = true
         pageNumber += 1
-        NetworkEngine.request(endpoint: UnsplashEndpoint.getResults(page: pageNumber)) { [self] (result: Result<[Post], Error>) in
+        NetworkEngine.request(endpoint: UnsplashEndpoint.getPostResults(page: pageNumber)) { (result: Result<[Post], Error>) in
             switch result {
             case .success(let posts):
                 self.posts.append(contentsOf: posts)
-                self.didEndRequest(getInsertionIndexPaths(for: pageNumber))
-                isPaginating = false
+                self.didEndRequest(self.getInsertionIndexPaths(for: self.pageNumber))
+                self.isPaginating = false
             default:
-                isPaginating = false
+                self.isPaginating = false
                 break
             }
         }
