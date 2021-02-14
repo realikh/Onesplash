@@ -26,7 +26,7 @@ final class ExpandedCollectionViewModel: ViewModel {
             switch result {
             case .success(let posts):
                 self.results.append(contentsOf: posts)
-                guard let insertionIndexPaths = self.getInsertionIndexPaths(for: self.pageNumber) else { print("All data fetched"); return }
+                guard let insertionIndexPaths = self.getInsertionIndexPaths(for: self.pageNumber) else { return }
                 self.didEndRequest(insertionIndexPaths)
                 self.isPaginating = false
             default:

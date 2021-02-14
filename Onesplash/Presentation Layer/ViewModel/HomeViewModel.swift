@@ -27,10 +27,8 @@ extension ViewModel {
         var indexPaths = [IndexPath]()
         let lowerBound = (pageNumber - 1) * 10
         let upperBound = results.count - 1
-        print("\(lowerBound) \(upperBound)")
         guard lowerBound < results.count else { return nil }
         for index in lowerBound...upperBound {
-            print(index)
             indexPaths.append(IndexPath(item: index, section: 0))
         }
         return indexPaths
@@ -46,14 +44,14 @@ final class HomeViewModel: ViewModel {
     
     func fetchPosts() {
         // If data is fetching already
-        guard !isPaginating else { print("Already fetching data"); return } //
+        guard !isPaginating else { return } //
         isPaginating = true
         pageNumber += 1
         networkEngine.request(endpoint: UnsplashEndpoint.getPostResults(page: pageNumber)) { (result: Result<[Post], Error>) in
             switch result {
             case .success(let posts):
                 self.results.append(contentsOf: posts)
-                guard let insertionIndexPaths = self.getInsertionIndexPaths(for: self.pageNumber) else { print("All data fetched"); return }
+                guard let insertionIndexPaths = self.getInsertionIndexPaths(for: self.pageNumber) else { return }
                 self.didEndRequest(insertionIndexPaths)
                 self.isPaginating = false
             default:

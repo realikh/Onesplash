@@ -18,7 +18,7 @@ final class SearchViewModel: ViewModel {
     private var query = "cats"
     
     func fetchData<T: Decodable>(with query: String, type: T.Type) {
-        guard !isPaginating else { print("Fetching data already"); return }
+        guard !isPaginating else { return }
         isPaginating = true
         pageNumber += 1
         networkEngine.request(endpoint:
@@ -31,7 +31,7 @@ final class SearchViewModel: ViewModel {
             switch response {
             case .success(let response):
                 self.results.append(contentsOf: response.results)
-                guard let insertionIndexPaths = self.getInsertionIndexPaths(for: self.pageNumber) else { print("All data fetched"); return }
+                guard let insertionIndexPaths = self.getInsertionIndexPaths(for: self.pageNumber) else { return }
                 guard self.results.count > 0 else { self.isPaginating = false; return }
                 self.didEndRequest(insertionIndexPaths)
                 self.isPaginating = false
