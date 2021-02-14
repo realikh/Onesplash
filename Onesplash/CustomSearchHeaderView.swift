@@ -8,6 +8,8 @@ import SnapKit
 
 class CustomSearchHeaderView: UIView {
     
+    @objc var clearButtonPressed: () -> Void = { }
+    
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -55,6 +57,6 @@ class CustomSearchHeaderView: UIView {
     }
     
     @objc private func clearButtonDidPress() {
-        print("clear")
+        clearButtonPressed()
     }
 }

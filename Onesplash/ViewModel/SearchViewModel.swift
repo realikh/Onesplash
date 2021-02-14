@@ -11,7 +11,7 @@ final class SearchViewModel: ViewModel {
     var didEndRequest: ([IndexPath]) -> Void = {_ in}
     private(set) var results = [Decodable]()
     private(set) var isPaginating = false
-    private(set) var recentSearches = [String]()
+    private(set) var recentSearches = [SearchHistory]()
     private var pageNumber = 0
     private var query = "cats"
     var requestCancelled = false
@@ -23,9 +23,9 @@ final class SearchViewModel: ViewModel {
         NetworkEngine.request(endpoint:
                                 UnsplashEndpoint
                                 .getSearchResults(searchText: query,
-                                                                  page: pageNumber,
-                                                                  dataType: String(describing: T.self
-                                                                          )))
+                                                  page: pageNumber,
+                                                  dataType: String(describing: T.self
+                                                  )))
         { (response: Result<APIResponse<T>, Error>) in
             switch response {
             case .success(let response):
@@ -60,7 +60,36 @@ final class SearchViewModel: ViewModel {
         results = []
     }
     
-    func addRecentSearched(string: String) {
-        recentSearches.append(string)
+    func addRecentSearch(string: String) {
+        if !checkRepition(title: string) {
+            let record = CoreDataManager.sharedInstance.createNewSearchRecord(title: string)
+            recentSearches.append(record)
+            CoreDataManager.sharedInstance.saveContext()
+        }
+        
+    }
+    
+    func fetchSearchHistory() {
+        if let fetchedResult = CoreDataManager.sharedInstance.fetchSearchRecords() {
+            recentSearches = fetchedResult
+        }
+    }
+    
+    func deleteSearchRecords() {
+        for i in recentSearches {
+            CoreDataManager.sharedInstance.delete(i)
+        }
+        recentSearches.removeAll()
+    }
+    
+    private func checkRepition(title: String) -> Bool{
+        for i in recentSearches {
+            if let safeTitle = i.title{
+                if (safeTitle.elementsEqual(title)) {
+                    return true
+                }
+            }
+        }
+        return false
     }
 }
