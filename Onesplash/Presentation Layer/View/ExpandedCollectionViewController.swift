@@ -73,7 +73,6 @@ extension ExpandedCollectionViewController: UICollectionViewDataSource {
             DispatchQueue.main.async {
                 cell.cellImageView.image = img
                 cell.userNameLabel.text = post.user.name
-//                cell.cellImageView.layer.mask = self.createGradient(with: cell.cellImageView.bounds)
                 cell.cellImageView.setupImageViewer()
                                cell.cellImageView.setupImageViewer(options: [.theme(.dark), .rightNavItemTitle("Download", onTap: { (Int) in
                                    print("download")
@@ -110,8 +109,6 @@ extension UINavigationItem {
         two.textColor = .gray
         two.textAlignment = .center
         two.sizeToFit()
-        
-        
         
         let stackView = UIStackView(arrangedSubviews: [one, two])
         stackView.distribution = .equalCentering

@@ -89,9 +89,13 @@
 		6836797525D955F40048E169 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				6836797B25D956210048E169 /* CustomCells */,
 				68FE16B825D4068000EE5B5A /* TabViewController.swift */,
 				774AC74A25BA1D4B002B689F /* HomeViewController.swift */,
 				68FE16BF25D4086800EE5B5A /* SearchViewController.swift */,
+				77474F8925D4425500D75C78 /* FooterCollectionReusableView.swift */,
+				7765983D25D520BD00D0ACD9 /* UIColor.swift */,
+				6836796F25D9421D0048E169 /* CustomSearchHeaderView.swift */,
 				6836796C25D9419D0048E169 /* ExpandedCollectionViewController.swift */,
 			);
 			path = View;
@@ -148,21 +152,13 @@
 		774AC74525BA1D4B002B689F /* Onesplash */ = {
 			isa = PBXGroup;
 			children = (
-				7742F09E25D7DA0D009DB5A1 /* Endpoint.swift */,
-				7742F0A125D7E061009DB5A1 /* NetworkEngineImpl.swift */,
-				6836797725D956070048E169 /* ViewModel */,
-				6836797525D955F40048E169 /* View */,
-				6836797925D956160048E169 /* Model */,
-				77474F8925D4425500D75C78 /* FooterCollectionReusableView.swift */,
-				6836797B25D956210048E169 /* CustomCells */,
-				7765983D25D520BD00D0ACD9 /* UIColor.swift */,
-				774AC75425BA1D4F002B689F /* LaunchScreen.storyboard */,
+				77C06A8325D995B800B61285 /* Service Layer */,
+				77C06A8025D9951100B61285 /* Presentation Layer */,
+				77C06A7F25D994EC00B61285 /* Persistence */,
 				7765983825D51D7100D0ACD9 /* Resources */,
 				7765983725D51D5D00D0ACD9 /* Supporting Files */,
 				774AC75725BA1D4F002B689F /* Info.plist */,
 				774AC74F25BA1D4B002B689F /* Onesplash.xcdatamodeld */,
-				6836796F25D9421D0048E169 /* CustomSearchHeaderView.swift */,
-				6836798125D95E940048E169 /* CoreDataManager.swift */,
 			);
 			path = Onesplash;
 			sourceTree = "<group>";
@@ -171,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				774AC74625BA1D4B002B689F /* AppDelegate.swift */,
+				774AC75425BA1D4F002B689F /* LaunchScreen.storyboard */,
 				774AC74825BA1D4B002B689F /* SceneDelegate.swift */,
 			);
 			path = "Supporting Files";
@@ -182,6 +179,33 @@
 				774AC75225BA1D4F002B689F /* Assets.xcassets */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		77C06A7F25D994EC00B61285 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				6836798125D95E940048E169 /* CoreDataManager.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		77C06A8025D9951100B61285 /* Presentation Layer */ = {
+			isa = PBXGroup;
+			children = (
+				6836797725D956070048E169 /* ViewModel */,
+				6836797525D955F40048E169 /* View */,
+				6836797925D956160048E169 /* Model */,
+			);
+			path = "Presentation Layer";
+			sourceTree = "<group>";
+		};
+		77C06A8325D995B800B61285 /* Service Layer */ = {
+			isa = PBXGroup;
+			children = (
+				7742F0A125D7E061009DB5A1 /* NetworkEngineImpl.swift */,
+				7742F09E25D7DA0D009DB5A1 /* Endpoint.swift */,
+			);
+			path = "Service Layer";
 			sourceTree = "<group>";
 		};
 		8B7E71C4F25C2A3A69CE245E /* Pods */ = {
