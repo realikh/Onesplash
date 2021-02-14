@@ -7,4 +7,5 @@ target 'Onesplash' do
 
   # Pods for Onesplash
   pod 'SnapKit'
+  pod 'ImageViewer.swift', '~> 3.0'
 end

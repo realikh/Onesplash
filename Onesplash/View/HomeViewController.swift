@@ -6,6 +6,7 @@
 //
 
 import SnapKit
+import ImageViewer_swift
 
 class HomeViewController: UIViewController {
     
@@ -99,6 +100,10 @@ extension HomeViewController: UICollectionViewDataSource {
                 cell.cellImageView.image = img
                 cell.userNameLabel.text = post.user.name
                 cell.cellImageView.layer.mask = self?.createGradient(with: cell.cellImageView.bounds)
+                cell.cellImageView.setupImageViewer()
+                               cell.cellImageView.setupImageViewer(options: [.theme(.dark), .rightNavItemTitle("Download", onTap: { (Int) in
+                                   print("download")
+                               })], from: self)
             }
         }
         return cell
