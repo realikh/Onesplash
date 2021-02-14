@@ -28,6 +28,7 @@
 		7765983E25D520BD00D0ACD9 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7765983D25D520BD00D0ACD9 /* UIColor.swift */; };
 		77DCFD9925D70BBB00EED409 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DCFD9825D70BBB00EED409 /* SearchViewModel.swift */; };
 		77E0D5E625BB15690053C7A8 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E0D5E525BB15690053C7A8 /* Post.swift */; };
+		77EE9AD625D92A4A005BA14E /* PostService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EE9AD525D92A4A005BA14E /* PostService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		7765983D25D520BD00D0ACD9 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		77DCFD9825D70BBB00EED409 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		77E0D5E525BB15690053C7A8 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		77EE9AD525D92A4A005BA14E /* PostService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PostService.swift; path = "../../../One/Demos/Lesson3-URLSession-main/OneLabe-Twitter/Service layer/PostService.swift"; sourceTree = "<group>"; };
 		873E1B43992A3006AB4AED55 /* Pods-Onesplash.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Onesplash.release.xcconfig"; path = "Target Support Files/Pods-Onesplash/Pods-Onesplash.release.xcconfig"; sourceTree = "<group>"; };
 		CEE01C462177F6FCD46322EB /* Pods-Onesplash.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Onesplash.debug.xcconfig"; path = "Target Support Files/Pods-Onesplash/Pods-Onesplash.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -105,6 +107,7 @@
 				774AC74A25BA1D4B002B689F /* HomeViewController.swift */,
 				77DCFD9825D70BBB00EED409 /* SearchViewModel.swift */,
 				68FE16BF25D4086800EE5B5A /* SearchViewController.swift */,
+				77EE9AD525D92A4A005BA14E /* PostService.swift */,
 				68FE16B825D4068000EE5B5A /* TabViewController.swift */,
 				77E0D5E525BB15690053C7A8 /* Post.swift */,
 				77474F8925D4425500D75C78 /* FooterCollectionReusableView.swift */,
@@ -276,6 +279,7 @@
 				774AC74925BA1D4B002B689F /* SceneDelegate.swift in Sources */,
 				774AC75125BA1D4B002B689F /* Onesplash.xcdatamodeld in Sources */,
 				7742F09F25D7DA0D009DB5A1 /* Endpoint.swift in Sources */,
+				77EE9AD625D92A4A005BA14E /* PostService.swift in Sources */,
 				77474F8A25D4425500D75C78 /* FooterCollectionReusableView.swift in Sources */,
 				77E0D5E625BB15690053C7A8 /* Post.swift in Sources */,
 				680BC0AE25D69F480003D341 /* CollectionsCustomCell.swift in Sources */,
