@@ -255,11 +255,8 @@
 			children = (
 				3212113385A8FBBDB272BD23C409FF61 /* Foundation.framework */,
 			);
-<<<<<<< HEAD
 			path = SnapKit;
-=======
 			name = iOS;
->>>>>>> 613ccf5c681d6ab198456a882ddfcdee3bdd65ea
 			sourceTree = "<group>";
 		};
 		C413D79396C3B9B653DFA5DAC756FC46 /* Support Files */ = {
