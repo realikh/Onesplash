@@ -143,7 +143,6 @@ extension SearchViewController: UISearchBarDelegate {
         viewModel.newQuery()
         collectionView.reloadData()
         scopeButtonIndex = selectedScope
-        viewModel.fetchData(searchText: searchText, scopeButtonIndex: scopeButtonIndex)
     }
 }
 

@@ -8,7 +8,7 @@
 import UIKit
 
 protocol ViewModel {
-    
+    var results: [Decodable] { get }
 }
 
 extension ViewModel {
@@ -21,9 +21,12 @@ extension ViewModel {
         }
     }
     
-    func getInsertionIndexPaths(for pageNumber: Int) -> [IndexPath] {
+    func getInsertionIndexPaths(for pageNumber: Int) -> [IndexPath]? {
         var indexPaths = [IndexPath]()
-        for index in (pageNumber - 1) * 10...(pageNumber * 10 - 1) {
+        let lowerBound = (pageNumber - 1) * 10
+        let upperBound = results.count
+        guard lowerBound <= results.count else { return nil }
+        for index in lowerBound...upperBound {
             indexPaths.append(IndexPath(item: index, section: 0))
         }
         return indexPaths
@@ -32,8 +35,8 @@ extension ViewModel {
 
 final class HomeViewModel: ViewModel {
     
-    var didEndRequest: ([IndexPath]) -> Void = { indexPaths in }
-    private(set) var posts = [Post]()
+    var didEndRequest: ([IndexPath]?) -> Void = { indexPaths in }
+    var results: [Decodable] = [Post]()
     private var pageNumber = 0
     private var isPaginating = false
     
@@ -42,11 +45,12 @@ final class HomeViewModel: ViewModel {
         guard !isPaginating else { print("Already fetching data"); return } //
         isPaginating = true
         pageNumber += 1
+        guard let insertionIndexPaths = getInsertionIndexPaths(for: pageNumber) else { print("All data fetched"); return }
         NetworkEngine.request(endpoint: UnsplashEndpoint.getPostResults(page: pageNumber)) { (result: Result<[Post], Error>) in
             switch result {
             case .success(let posts):
-                self.posts.append(contentsOf: posts)
-                self.didEndRequest(self.getInsertionIndexPaths(for: self.pageNumber))
+                self.results.append(contentsOf: posts)
+                self.didEndRequest(insertionIndexPaths)
                 self.isPaginating = false
             default:
                 self.isPaginating = false

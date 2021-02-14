@@ -18,6 +18,7 @@ final class SearchViewModel: ViewModel {
         guard !isPaginating else { print("Fetching data already"); return }
         isPaginating = true
         pageNumber += 1
+        guard let insertionIndexPaths = getInsertionIndexPaths(for: pageNumber) else { print("All data fetched"); return }
         NetworkEngine.request(endpoint:
                                 UnsplashEndpoint
                                 .getSearchResults(searchText: query,
@@ -28,7 +29,8 @@ final class SearchViewModel: ViewModel {
             switch response {
             case .success(let response):
                 self.results.append(contentsOf: response.results)
-                self.didEndRequest(self.getInsertionIndexPaths(for: self.pageNumber))
+                guard self.results.count > 0 else { self.isPaginating = false; return }
+                self.didEndRequest(insertionIndexPaths)
                 self.isPaginating = false
             case .failure:
                 self.isPaginating = false
@@ -50,6 +52,7 @@ final class SearchViewModel: ViewModel {
     }
     
     func newQuery() {
+        isPaginating = false
         pageNumber = 0
         results = []
     }

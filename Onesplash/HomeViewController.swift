@@ -53,6 +53,7 @@ class HomeViewController: UIViewController {
     
     private func bindViewModel() {
         viewModel.didEndRequest = { indexPaths in
+            guard let  indexPaths = indexPaths else { return }
             DispatchQueue.main.async { [weak self] in
                 self?.collectionView.performBatchUpdates { [weak self] in
                     self?.collectionView.insertItems(at: indexPaths)
@@ -82,13 +83,13 @@ class HomeViewController: UIViewController {
 
 extension HomeViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.posts.count
+        viewModel.results.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PostsCustomCell.self),
                                                       for: indexPath) as! PostsCustomCell
-        let post = viewModel.posts[indexPath.row]
+        let post = viewModel.results[indexPath.row] as! Post
         cell.cellImageView.image = nil
         cell.cellImageView.backgroundColor = UIColor(hex: post.color)
         
@@ -133,7 +134,7 @@ extension HomeViewController: UIScrollViewDelegate {
 // MARK: CollectionViewDelegateFlowLayout
 extension HomeViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let post = viewModel.posts[indexPath.row]
+        let post = viewModel.results[indexPath.row] as! Post
         return CGSize(width: view.frame.width, height: CGFloat(350 * (post.height/post.width)))
     }
 }
