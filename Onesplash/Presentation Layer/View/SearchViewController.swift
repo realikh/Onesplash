@@ -258,7 +258,8 @@ extension SearchViewController: UICollectionViewDataSource {
         switch scopeButtonIndex {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PostsCustomCell.self), for: indexPath) as! PostsCustomCell
-            let post = viewModel.results[indexPath.row] as! Post
+            
+            guard let post = viewModel.results[indexPath.row] as? Post else { return cell }
             
             cell.cellImageView.image = nil
             cell.cellImageView.backgroundColor = UIColor(hex: post.color)
@@ -280,7 +281,7 @@ extension SearchViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CollectionsCustomCell.self),
                                                           for: indexPath) as! CollectionsCustomCell
 
-            let collection = viewModel.results[indexPath.row] as! Collection
+            guard let collection = viewModel.results[indexPath.row] as? Collection else { return cell }
             
             cell.collectionImageView.image = nil
             
@@ -294,7 +295,7 @@ extension SearchViewController: UICollectionViewDataSource {
             return cell
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: UsersCustomCell.self), for: indexPath) as! UsersCustomCell
-            let user = viewModel.results[indexPath.row] as! User
+            guard let user = viewModel.results[indexPath.row] as? User else { return cell }
             
             cell.userImageView.image = nil
             cell.userImageView.backgroundColor = UIColor(hex: user.profile_image.medium)

@@ -16,7 +16,6 @@ final class SearchViewModel: ViewModel {
     private(set) var recentSearches = [SearchHistory]()
     private var pageNumber = 0
     private var query = "cats"
-    var requestCancelled = false
     
     func fetchData<T: Decodable>(with query: String, type: T.Type) {
         guard !isPaginating else { print("Fetching data already"); return }
@@ -31,7 +30,6 @@ final class SearchViewModel: ViewModel {
         { (response: Result<APIResponse<T>, Error>) in
             switch response {
             case .success(let response):
-                guard !self.requestCancelled else { self.requestCancelled = false; self.isPaginating = false; return }
                 self.results.append(contentsOf: response.results)
                 guard let insertionIndexPaths = self.getInsertionIndexPaths(for: self.pageNumber) else { print("All data fetched"); return }
                 guard self.results.count > 0 else { self.isPaginating = false; return }
