@@ -7,7 +7,7 @@
 
 import SnapKit
 
-class CustomCollectionViewCell: UICollectionViewCell {
+class PostsCustomCell: UICollectionViewCell {
     
     var cellImageView: UIImageView = {
         let imageView = UIImageView()

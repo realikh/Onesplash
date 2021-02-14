@@ -7,6 +7,9 @@
 
 import Foundation
 
+struct APIResponse<T: Decodable>: Decodable {
+    let results: [T]
+}
 
 struct PostUser: Decodable {
     let name: String
@@ -21,6 +24,7 @@ struct Post: Decodable {
     let description: String?
     let width: Double
     let height: Double
+    let color: String
     let user: PostUser
     let urls: PostUrls
 }
