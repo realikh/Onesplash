@@ -57,4 +57,8 @@ final class SearchViewModel: ViewModel {
         pageNumber = 0
         results = []
     }
+    
+    func addRecentSearched(string: String) {
+        recentSearches.append(string)
+    }
 }

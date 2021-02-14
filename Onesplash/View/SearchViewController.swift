@@ -66,6 +66,8 @@ class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(named: "DarkTheme")
+        tableView.delegate = self
+        tableView.dataSource = self
         layoutUI()
         bindViewModel()
     }
@@ -165,7 +167,7 @@ class SearchViewController: UIViewController {
 // MARK: Table View Data Source
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.results.count
+        return viewModel.recentSearches.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -217,6 +219,7 @@ extension SearchViewController: UISearchBarDelegate {
         collectionView.setContentOffset(.zero, animated: true)
         tableView.alpha = 0
         collectionView.alpha = 1.0
+        viewModel.addRecentSearched(string: searchBar.text!)
         viewModel.newQuery()
         viewModel.fetchData(searchText: searchText, scopeButtonIndex: scopeButtonIndex)
         searchBar.endEditing(true)
@@ -224,6 +227,7 @@ extension SearchViewController: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
+            tableView.reloadData()
             tableView.alpha = 1.0
             collectionView.alpha = 0
         }
