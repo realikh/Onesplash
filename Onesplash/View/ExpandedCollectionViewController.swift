@@ -68,12 +68,11 @@ extension ExpandedCollectionViewController: UICollectionViewDataSource {
         cell.cellImageView.image = nil
         cell.cellImageView.backgroundColor = UIColor(hex: post.color)
         
-        viewModel.image(url: post.urls.regular) { [weak self] image, error  in
+        viewModel.image(url: post.urls.regular) { image, error  in
             guard let img = image else { return }
             DispatchQueue.main.async {
                 cell.cellImageView.image = img
                 cell.userNameLabel.text = post.user.name
-//                cell.cellImageView.layer.mask = self?.createGradient(with: cell.cellImageView.bounds)
             }
         }
         return cell

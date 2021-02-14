@@ -127,6 +127,7 @@ class SearchViewController: UIViewController {
     
     @objc private func segmentedControlChanged(_ sender: UISegmentedControl) {
         viewModel.newQuery()
+        viewModel.requestCancelled = true
         collectionView.reloadData()
         scopeButtonIndex = sender.selectedSegmentIndex
         switch scopeButtonIndex {
@@ -221,6 +222,7 @@ extension SearchViewController: UISearchBarDelegate {
         collectionView.alpha = 1.0
         viewModel.addRecentSearched(string: searchBar.text!)
         viewModel.newQuery()
+        collectionView.reloadData()
         viewModel.fetchData(searchText: searchText, scopeButtonIndex: scopeButtonIndex)
         searchBar.endEditing(true)
     }

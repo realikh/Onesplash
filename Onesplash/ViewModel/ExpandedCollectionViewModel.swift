@@ -20,11 +20,11 @@ final class ExpandedCollectionViewModel: ViewModel {
         guard !isPaginating else { print("Already fetching data"); return } //
         isPaginating = true
         pageNumber += 1
-        guard let insertionIndexPaths = getInsertionIndexPaths(for: pageNumber) else { print("All data fetched"); return }
         NetworkEngine.request(endpoint: UnsplashEndpoint.getCollectionPhotos(id: id, page: pageNumber)) { (result: Result<[Post], Error>) in
             switch result {
             case .success(let posts):
                 self.results.append(contentsOf: posts)
+                guard let insertionIndexPaths = self.getInsertionIndexPaths(for: self.pageNumber) else { print("All data fetched"); return }
                 self.didEndRequest(insertionIndexPaths)
                 self.isPaginating = false
             default:

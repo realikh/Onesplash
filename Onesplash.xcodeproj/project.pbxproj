@@ -87,9 +87,9 @@
 		6836797525D955F40048E169 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				68FE16B825D4068000EE5B5A /* TabViewController.swift */,
 				774AC74A25BA1D4B002B689F /* HomeViewController.swift */,
 				68FE16BF25D4086800EE5B5A /* SearchViewController.swift */,
-				68FE16B825D4068000EE5B5A /* TabViewController.swift */,
 				6836796C25D9419D0048E169 /* ExpandedCollectionViewController.swift */,
 			);
 			path = View;
