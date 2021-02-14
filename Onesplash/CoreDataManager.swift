@@ -19,6 +19,13 @@ class CoreDataManager: NSObject {
             return newRecord
     }
     
+    func createFilterAttributes(title: String, state: Bool) -> FilterAttributes {
+        let attr = FilterAttributes(context: managedObjectContext())
+        attr.title = title
+        attr.state = state
+        return attr
+    }
+    
     func saveContext() {
         do{
             try self.managedObjectContext().save()
@@ -26,8 +33,8 @@ class CoreDataManager: NSObject {
             print(error)
         }
     }
-    func fetchSearchRecords() -> [SearchHistory]? {
-        let request: NSFetchRequest<SearchHistory> = SearchHistory.fetchRequest()
+    func fetchSearchRecords<T: NSManagedObject>(type: T.Type) -> [T]? {
+        let request = NSFetchRequest<T>(entityName: String(describing: T.self))
         do {
             let recordArray = try managedObjectContext().fetch(request)
             return recordArray

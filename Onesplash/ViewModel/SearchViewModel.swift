@@ -70,7 +70,7 @@ final class SearchViewModel: ViewModel {
     }
     
     func fetchSearchHistory() {
-        if let fetchedResult = CoreDataManager.sharedInstance.fetchSearchRecords() {
+        if let fetchedResult = CoreDataManager.sharedInstance.fetchSearchRecords(type: SearchHistory.self) {
             recentSearches = fetchedResult
         }
     }
