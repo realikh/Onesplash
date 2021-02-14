@@ -18,6 +18,7 @@ enum UnsplashEndpoint: Endpoint {
     
     case getPostResults(page: Int)
     case getSearchResults(searchText: String, page: Int, dataType: String)
+    case getCollectionPhotos(id: Int, page: Int)
     
     var scheme: String {
         switch self {
@@ -48,6 +49,8 @@ enum UnsplashEndpoint: Endpoint {
             default:
                 return "/photos"
             }
+        case .getCollectionPhotos(id: let id, page: _):
+            return "/collections/\(id)/photos"
         }
     }
     
@@ -58,6 +61,8 @@ enum UnsplashEndpoint: Endpoint {
         case .getSearchResults(let searchText, let page, _):
             return [URLQueryItem(name: "page", value: "\(page)"),
                     URLQueryItem(name: "query", value: searchText)]
+        case .getCollectionPhotos(id: _, page: let page):
+            return [URLQueryItem(name: "page", value: "\(page)")]
         }
     }
 }

@@ -11,6 +11,7 @@ final class SearchViewModel: ViewModel {
     var didEndRequest: ([IndexPath]) -> Void = {_ in}
     private(set) var results = [Decodable]()
     private(set) var isPaginating = false
+    private(set) var recentSearches = [String]()
     private var pageNumber = 0
     private var query = "cats"
     

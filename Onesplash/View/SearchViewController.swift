@@ -8,16 +8,17 @@
 import SnapKit
 
 class SearchViewController: UIViewController {
-
+    
     let viewModel = SearchViewModel()
-
+    
     private var scopeButtonIndex = 0
     private var searchText = ""
     
     private let tableView: UITableView = {
-        let tableView = UITableView()
+        let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.backgroundColor = UIColor(named: "DarkTheme")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: String(describing: UITableViewCell.self))
         return tableView
     }()
     
@@ -25,9 +26,12 @@ class SearchViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(PostsCustomCell.self, forCellWithReuseIdentifier: String(describing: PostsCustomCell.self))
-        collectionView.register(CollectionsCustomCell.self, forCellWithReuseIdentifier: String(describing: CollectionsCustomCell.self))
-        collectionView.register(UsersCustomCell.self, forCellWithReuseIdentifier: String(describing: UsersCustomCell.self))
+        collectionView.register(PostsCustomCell.self,
+                                forCellWithReuseIdentifier: String(describing: PostsCustomCell.self))
+        collectionView.register(CollectionsCustomCell.self,
+                                forCellWithReuseIdentifier: String(describing: CollectionsCustomCell.self))
+        collectionView.register(UsersCustomCell.self,
+                                forCellWithReuseIdentifier: String(describing: UsersCustomCell.self))
         collectionView.alpha = 0
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.backgroundColor = UIColor(named: "DarkTheme")
@@ -36,12 +40,13 @@ class SearchViewController: UIViewController {
     
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.showsScopeBar = true
         searchBar.tintColor = .white
-        searchBar.scopeButtonTitles = ["Photos", "Collections", "Users"]
         searchBar.barTintColor = UIColor(named: "DarkTheme")
         searchBar.backgroundColor = UIColor(named: "DarkTheme")
+        let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
+        textFieldInsideSearchBar?.textColor = .white
         return searchBar
+        
     }()
     
     private let flowLayout: UICollectionViewFlowLayout = {
@@ -49,6 +54,13 @@ class SearchViewController: UIViewController {
         collectionViewFlowLayout.minimumLineSpacing = 10
         collectionViewFlowLayout.minimumInteritemSpacing = 0
         return collectionViewFlowLayout
+    }()
+    
+    private let segmentedControl: UISegmentedControl = {
+        let segmentedControl = UISegmentedControl(items: ["Photos", "Collections", "Users"])
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.addTarget(self, action: #selector(segmentedControlChanged(_:)), for: .valueChanged)
+        return segmentedControl
     }()
     
     override func viewDidLoad() {
@@ -60,30 +72,74 @@ class SearchViewController: UIViewController {
     
     private func layoutUI() {
         configureSearchBar()
+        configureSegmentedControl()
         configureTableView()
         configureCollectionView()
     }
     
-    private func configureSearchBar() {
-        searchBar.delegate = self
-        tabBarController?.navigationItem.titleView = searchBar
-        tabBarController?.navigationController?.navigationBar.isTranslucent = false
+    private func configureSegmentedControl() {
+        view.addSubview(segmentedControl)
+        segmentedControl.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.left.equalTo(view.safeAreaLayoutGuide).offset(19)
+            $0.right.equalTo(view.safeAreaLayoutGuide).offset(-19)
+            $0.height.equalTo(30)
+        }
     }
     
     private func configureTableView() {
         view.addSubview(tableView)
         tableView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(segmentedControl.snp.bottom)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.right.equalTo(view.safeAreaLayoutGuide)
+            $0.left.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
     private func configureCollectionView() {
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
+            $0.top.equalTo(segmentedControl.snp.bottom).offset(10)
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
             $0.right.equalTo(view.safeAreaLayoutGuide)
             $0.left.equalTo(view.safeAreaLayoutGuide)
+        }
+    }
+    
+    private func configureSearchBar() {
+        searchBar.delegate = self
+        tabBarController?.navigationItem.titleView = searchBar
+        tabBarController?.navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.barTintColor = UIColor(named: "DarkTheme")
+        tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filters"),
+                                                                              style: .plain,
+                                                                              target: self, action: #selector(lol))
+        tabBarController?.navigationItem.rightBarButtonItem?.tintColor = .white
+        
+    }
+    
+    @objc func lol(){
+        print("lol")
+    }
+    
+    @objc private func segmentedControlChanged(_ sender: UISegmentedControl) {
+        viewModel.newQuery()
+        collectionView.reloadData()
+        scopeButtonIndex = sender.selectedSegmentIndex
+        switch scopeButtonIndex {
+        case 0:
+            viewModel.fetchData(searchText: searchBar.text!, scopeButtonIndex: 0)
+            tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filters"),
+                                                                                  style: .plain,
+                                                                                  target: self, action: #selector(lol))
+            tabBarController?.navigationItem.rightBarButtonItem?.tintColor = .white
+        case 1:
+            viewModel.fetchData(searchText: searchBar.text!, scopeButtonIndex: 1)
+            tabBarController?.navigationItem.rightBarButtonItem = .none
+        default:
+            viewModel.fetchData(searchText: searchBar.text!, scopeButtonIndex: 2)
+            tabBarController?.navigationItem.rightBarButtonItem = .none
         }
     }
     
@@ -113,16 +169,50 @@ extension SearchViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reusableCell", for: indexPath)
-        cell.textLabel?.text = "Test"
+        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: UITableViewCell.self), for: indexPath)
+        cell.textLabel?.text = viewModel.recentSearches[indexPath.row]
+        cell.backgroundColor = UIColor(named: "DarkTheme")
+        cell.textLabel?.textColor = .white
         return cell
     }
+}
+
+extension SearchViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 50
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = CustomSearchHeaderView()
+        return view
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        scopeButtonIndex = segmentedControl.selectedSegmentIndex
+        tableView.alpha = 0
+        collectionView.alpha = 1.0
+        searchBar.text = viewModel.recentSearches[indexPath.row]
+        tableView.deselectRow(at: indexPath, animated: true)
+        switch scopeButtonIndex {
+        case 0:
+            viewModel.fetchData(searchText: searchBar.text!, scopeButtonIndex: 0)
+            searchBar.endEditing(true)
+        case 1:
+            viewModel.fetchData(searchText: searchBar.text!, scopeButtonIndex: 1)
+            searchBar.endEditing(true)
+        default:
+            viewModel.fetchData(searchText: searchBar.text!, scopeButtonIndex: 2)
+            searchBar.endEditing(true)
+        }
+    }
+    
 }
 
 // MARK: Search Bar Delegate
 extension SearchViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        scopeButtonIndex = segmentedControl.selectedSegmentIndex
         searchText = searchBar.text ?? "cats"
         collectionView.setContentOffset(.zero, animated: true)
         tableView.alpha = 0
@@ -138,28 +228,22 @@ extension SearchViewController: UISearchBarDelegate {
             collectionView.alpha = 0
         }
     }
-    
-    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        viewModel.newQuery()
-        collectionView.reloadData()
-        scopeButtonIndex = selectedScope
-    }
 }
 
 extension SearchViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.results.count
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch scopeButtonIndex {
         case 0:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: PostsCustomCell.self), for: indexPath) as! PostsCustomCell
             let post = viewModel.results[indexPath.row] as! Post
-
+            
             cell.cellImageView.image = nil
             cell.cellImageView.backgroundColor = UIColor(hex: post.color)
-
+            
             viewModel.image(url: post.urls.regular) { [weak self] image, error  in
                 guard let img = image else { return }
                 DispatchQueue.main.async {
@@ -173,9 +257,9 @@ extension SearchViewController: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CollectionsCustomCell.self),
                                                           for: indexPath) as! CollectionsCustomCell
             let collection = viewModel.results[indexPath.row] as! Collection
-
+            
             cell.collectionImageView.image = nil
-
+            
             viewModel.image(url: collection.cover_photo.urls.regular) { image, error  in
                 guard let img = image else { return }
                 DispatchQueue.main.async {
@@ -187,7 +271,7 @@ extension SearchViewController: UICollectionViewDataSource {
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: UsersCustomCell.self), for: indexPath) as! UsersCustomCell
             let user = viewModel.results[indexPath.row] as! User
-
+            
             cell.userImageView.image = nil
             cell.userImageView.backgroundColor = UIColor(hex: user.profile_image.medium)
             
@@ -236,5 +320,25 @@ extension SearchViewController: UIScrollViewDelegate {
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         searchBar.endEditing(true)
+    }
+}
+
+extension SearchViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if scopeButtonIndex == 1 {
+            let collection = viewModel.results[indexPath.row] as! Collection
+            let transition = CATransition()
+            transition.duration = 0.5
+            transition.type = CATransitionType.push
+            transition.subtype = CATransitionSubtype.fromRight
+            transition.timingFunction = CAMediaTimingFunction(name:CAMediaTimingFunctionName.easeInEaseOut)
+            view.window!.layer.add(transition, forKey: kCATransition)
+            let vc = ExpandedCollectionViewController()
+            vc.collectionId = Int(collection.id)
+            vc.collectionOwner = collection.user.name
+            vc.collectionTitle = collection.title
+            vc.modalPresentationStyle = .fullScreen
+            self.navigationController?.pushViewController(vc, animated: false)
+        }
     }
 }
