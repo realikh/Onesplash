@@ -78,6 +78,7 @@ class HomeViewController: UIViewController {
         tabBarController?.navigationController?.navigationBar.titleTextAttributes = textAttributes
         tabBarController?.navigationItem.title = "UNSPLASH"
         tabBarController?.navigationItem.titleView = .none
+        tabBarController?.navigationItem.rightBarButtonItem = .none
     }
 }
 

@@ -74,6 +74,10 @@ class SearchViewController: UIViewController {
         bindViewModel()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        layoutUI()
+    }
+    
     private func layoutUI() {
         configureSearchBar()
         configureSegmentedControl()
