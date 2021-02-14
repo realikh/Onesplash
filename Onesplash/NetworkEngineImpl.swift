@@ -7,9 +7,14 @@
 
 import Foundation
 
-final class NetworkEngine {
+protocol NetworkEngine {
+    func request<T: Decodable>(endpoint: Endpoint, completion: @escaping (Result<T, Error>) -> Void)
+    func download(urlString: String, completion: @escaping(Data?, Error?) -> Void)
+}
+
+final class NetworkEngineImpl: NetworkEngine {
     
-    class func request<T: Decodable>(endpoint: Endpoint, completion: @escaping (Result<T, Error>) -> Void) {
+    func request<T: Decodable>(endpoint: Endpoint, completion: @escaping (Result<T, Error>) -> Void) {
         
         let accessKey = "g_bih1OD8GhQVHrcjPPqyo7Ho19HZddWwakzUgjVNuM"
         var components = URLComponents()
@@ -45,7 +50,7 @@ final class NetworkEngine {
         dataTask.resume()
     }
     
-    class func download(urlString: String, completion: @escaping(Data?, Error?) -> Void) {
+    func download(urlString: String, completion: @escaping(Data?, Error?) -> Void) {
         
         guard let url = URL(string: urlString) else { print("Invalid URL"); return }
         let session = URLSession(configuration: .default)

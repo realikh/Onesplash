@@ -10,6 +10,8 @@ import UIKit
 
 final class ExpandedCollectionViewModel: ViewModel {
     
+    var networkEngine: NetworkEngine = NetworkEngineImpl()
+    
     var didEndRequest: ([IndexPath]?) -> Void = { indexPaths in }
     var results: [Decodable] = [Post]()
     private var pageNumber = 0
@@ -20,7 +22,7 @@ final class ExpandedCollectionViewModel: ViewModel {
         guard !isPaginating else { print("Already fetching data"); return } //
         isPaginating = true
         pageNumber += 1
-        NetworkEngine.request(endpoint: UnsplashEndpoint.getCollectionPhotos(id: id, page: pageNumber)) { (result: Result<[Post], Error>) in
+        networkEngine.request(endpoint: UnsplashEndpoint.getCollectionPhotos(id: id, page: pageNumber)) { (result: Result<[Post], Error>) in
             switch result {
             case .success(let posts):
                 self.results.append(contentsOf: posts)

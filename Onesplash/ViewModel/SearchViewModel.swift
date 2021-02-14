@@ -8,7 +8,9 @@
 import UIKit
 
 final class SearchViewModel: ViewModel {
-    var didEndRequest: ([IndexPath]) -> Void = {_ in}
+    
+    var didEndRequest: ([IndexPath]) -> Void = { _ in }
+    var networkEngine: NetworkEngine = NetworkEngineImpl()
     private(set) var results = [Decodable]()
     private(set) var isPaginating = false
     private(set) var recentSearches = [SearchHistory]()
@@ -20,7 +22,7 @@ final class SearchViewModel: ViewModel {
         guard !isPaginating else { print("Fetching data already"); return }
         isPaginating = true
         pageNumber += 1
-        NetworkEngine.request(endpoint:
+        networkEngine.request(endpoint:
                                 UnsplashEndpoint
                                 .getSearchResults(searchText: query,
                                                   page: pageNumber,
