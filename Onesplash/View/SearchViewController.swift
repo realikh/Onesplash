@@ -10,6 +10,7 @@ import SnapKit
 class SearchViewController: UIViewController {
     
     let viewModel = SearchViewModel()
+    let headerView = CustomSearchHeaderView()
     
     private var scopeButtonIndex = 0
     private var searchText = ""
@@ -68,6 +69,7 @@ class SearchViewController: UIViewController {
         view.backgroundColor = UIColor(named: "DarkTheme")
         tableView.delegate = self
         tableView.dataSource = self
+        viewModel.fetchSearchHistory()
         layoutUI()
         bindViewModel()
     }
@@ -161,6 +163,11 @@ class SearchViewController: UIViewController {
                 }
             }
         }
+        headerView.clearButtonPressed = {
+            self.viewModel.deleteSearchRecords()
+            
+            self.tableView.reloadData()
+        }
     }
 }
 
@@ -172,7 +179,7 @@ extension SearchViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: UITableViewCell.self), for: indexPath)
-        cell.textLabel?.text = viewModel.recentSearches[indexPath.row]
+        cell.textLabel?.text = viewModel.recentSearches[indexPath.row].title
         cell.backgroundColor = UIColor(named: "DarkTheme")
         cell.textLabel?.textColor = .white
         return cell
@@ -185,24 +192,26 @@ extension SearchViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = CustomSearchHeaderView()
-        return view
+        return headerView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         scopeButtonIndex = segmentedControl.selectedSegmentIndex
         tableView.alpha = 0
         collectionView.alpha = 1.0
-        searchBar.text = viewModel.recentSearches[indexPath.row]
+        searchBar.text = viewModel.recentSearches[indexPath.row].title
         tableView.deselectRow(at: indexPath, animated: true)
         switch scopeButtonIndex {
         case 0:
+            viewModel.newQuery()
             viewModel.fetchData(searchText: searchBar.text!, scopeButtonIndex: 0)
             searchBar.endEditing(true)
         case 1:
+            viewModel.newQuery()
             viewModel.fetchData(searchText: searchBar.text!, scopeButtonIndex: 1)
             searchBar.endEditing(true)
         default:
+            viewModel.newQuery()
             viewModel.fetchData(searchText: searchBar.text!, scopeButtonIndex: 2)
             searchBar.endEditing(true)
         }
@@ -219,7 +228,7 @@ extension SearchViewController: UISearchBarDelegate {
         collectionView.setContentOffset(.zero, animated: true)
         tableView.alpha = 0
         collectionView.alpha = 1.0
-        viewModel.addRecentSearched(string: searchBar.text!)
+        viewModel.addRecentSearch(string: searchBar.text!)
         viewModel.newQuery()
         viewModel.fetchData(searchText: searchText, scopeButtonIndex: scopeButtonIndex)
         searchBar.endEditing(true)
