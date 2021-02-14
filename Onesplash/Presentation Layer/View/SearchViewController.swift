@@ -133,10 +133,10 @@ class SearchViewController: UIViewController {
     }
     
     @objc private func segmentedControlChanged(_ sender: UISegmentedControl) {
-        viewModel.newQuery()
-        viewModel.requestCancelled = true
-        collectionView.reloadData()
+//        viewModel.requestCancelled = true
         scopeButtonIndex = sender.selectedSegmentIndex
+        viewModel.newQuery()
+        collectionView.reloadData()
         switch scopeButtonIndex {
         case 0:
             viewModel.fetchData(searchText: searchBar.text!, scopeButtonIndex: 0)
@@ -279,6 +279,7 @@ extension SearchViewController: UICollectionViewDataSource {
         case 1:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: String(describing: CollectionsCustomCell.self),
                                                           for: indexPath) as! CollectionsCustomCell
+
             let collection = viewModel.results[indexPath.row] as! Collection
             
             cell.collectionImageView.image = nil
@@ -317,8 +318,10 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch scopeButtonIndex {
         case 0:
-            let post = viewModel.results[indexPath.row] as! Post
-            return CGSize(width: view.frame.width, height: CGFloat(350 * (post.height/post.width)))
+            if let post = viewModel.results[indexPath.row] as? Post {
+                return CGSize(width: view.frame.width, height: CGFloat(350 * (post.height/post.width)))
+            }
+            return CGSize(width: view.frame.width - 20, height: 200)
         case 1:
             return CGSize(width: view.frame.width - 20, height: 200)
         default:

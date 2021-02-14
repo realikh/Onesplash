@@ -19,12 +19,12 @@ class CoreDataManager: NSObject {
             return newRecord
     }
     
-    func createFilterAttributes(title: String, state: Bool) -> FilterAttributes {
-        let attr = FilterAttributes(context: managedObjectContext())
-        attr.title = title
-        attr.state = state
-        return attr
-    }
+//    func createFilterAttributes(title: String, state: Bool) -> FilterAttributes {
+//        let attr = FilterAttributes(context: managedObjectContext())
+//        attr.title = title
+//        attr.state = state
+//        return attr
+//    }
     
     func saveContext() {
         do{
