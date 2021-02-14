@@ -60,14 +60,19 @@ class SearchViewController: UIViewController {
     
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.showsScopeBar = true
         searchBar.tintColor = .white
-        searchBar.scopeButtonTitles = ["Photos", "Collections", "Users"]
         searchBar.barTintColor = UIColor(named: "DarkTheme")
         searchBar.backgroundColor = UIColor(named: "DarkTheme")
         let textFieldInsideSearchBar = searchBar.value(forKey: "searchField") as? UITextField
         textFieldInsideSearchBar?.textColor = .white
         return searchBar
+    }()
+    
+    private let segmentedControl: UISegmentedControl = {
+        let segmentedControl = UISegmentedControl(items: ["Photos", "Collections", "Users"])
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.addTarget(self, action: #selector(segmentedControlChanged(_:)), for: .valueChanged)
+        return segmentedControl
     }()
     
     override func viewDidLoad() {
@@ -84,21 +89,35 @@ class SearchViewController: UIViewController {
     
     private func layoutUI() {
         configureSearchBar()
+        configureSegmentedControl()
         configureTableView()
         configureCollectionView()
+    }
+    
+    private func configureSegmentedControl() {
+        view.addSubview(segmentedControl)
+        segmentedControl.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.left.equalTo(view.safeAreaLayoutGuide).offset(19)
+            $0.right.equalTo(view.safeAreaLayoutGuide).offset(-19)
+            $0.height.equalTo(30)
+        }
     }
     
     private func configureTableView() {
         view.addSubview(tableView)
         tableView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(segmentedControl.snp.bottom)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.right.equalTo(view.safeAreaLayoutGuide)
+            $0.left.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
     private func configureCollectionView() {
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(10)
+            $0.top.equalTo(segmentedControl.snp.bottom).offset(10)
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
             $0.right.equalTo(view.safeAreaLayoutGuide)
             $0.left.equalTo(view.safeAreaLayoutGuide)
@@ -110,6 +129,33 @@ class SearchViewController: UIViewController {
         tabBarController?.navigationItem.titleView = searchBar
         tabBarController?.navigationController?.navigationBar.isTranslucent = false
         navigationController?.navigationBar.barTintColor = UIColor(named: "DarkTheme")
+        tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filters"),
+                                                                              style: .plain,
+                                                                            target: self, action: #selector(lol))
+        tabBarController?.navigationItem.rightBarButtonItem?.tintColor = .white
+        
+    }
+    
+    @objc func lol(){
+        print("lol")
+    }
+    
+    @objc private func segmentedControlChanged(_ sender: UISegmentedControl) {
+        scopeButtonIndex = sender.selectedSegmentIndex
+        switch scopeButtonIndex {
+        case 0:
+            searchPosts(with: searchBar.text!)
+            tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filters"),
+                                                                                  style: .plain,
+                                                                                target: self, action: #selector(lol))
+            tabBarController?.navigationItem.rightBarButtonItem?.tintColor = .white
+        case 1:
+            searchCollections(with: searchBar.text!)
+            tabBarController?.navigationItem.rightBarButtonItem = .none
+        default:
+            searchUsers(with: searchBar.text!)
+            tabBarController?.navigationItem.rightBarButtonItem = .none
+        }
     }
     
     private func searchPosts(with query: String) {
@@ -182,6 +228,7 @@ extension SearchViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        scopeButtonIndex = segmentedControl.selectedSegmentIndex
         tableView.alpha = 0
         collectionView.alpha = 1.0
         searchBar.text = recentSearches[indexPath.row]
@@ -203,6 +250,7 @@ extension SearchViewController: UITableViewDelegate {
 
 extension SearchViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        scopeButtonIndex = segmentedControl.selectedSegmentIndex
         tableView.alpha = 0
         collectionView.alpha = 1.0
         recentSearches.append(searchBar.text!)
@@ -229,18 +277,7 @@ extension SearchViewController: UISearchBarDelegate {
         if searchText == ""{
             tableView.alpha = 1.0
             collectionView.alpha = 0
-        }
-    }
-    
-    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        scopeButtonIndex = selectedScope
-        switch scopeButtonIndex {
-        case 0:
-            searchPosts(with: searchBar.text!)
-        case 1:
-            searchCollections(with: searchBar.text!)
-        default:
-            searchUsers(with: searchBar.text!)
+            print(segmentedControl.selectedSegmentIndex)
         }
     }
 }
@@ -381,4 +418,5 @@ extension SearchViewController: UICollectionViewDelegateFlowLayout {
         
     }
 }
+
 
