@@ -272,7 +272,9 @@ extension SearchViewController: UICollectionViewDataSource {
                     cell.cellImageView.layer.mask = self?.createGradient(with: cell.cellImageView.bounds)
                     cell.cellImageView.setupImageViewer()
                                    cell.cellImageView.setupImageViewer(options: [.theme(.dark), .rightNavItemTitle("Download", onTap: { (Int) in
-                                       print("download")
+                                    guard let image = cell.cellImageView.image else { return }
+                                    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+                                       print("downloaded")
                                    })], from: self)
                 }
             }

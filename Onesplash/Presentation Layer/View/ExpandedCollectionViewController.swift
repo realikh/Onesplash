@@ -75,7 +75,9 @@ extension ExpandedCollectionViewController: UICollectionViewDataSource {
                 cell.userNameLabel.text = post.user.name
                 cell.cellImageView.setupImageViewer()
                                cell.cellImageView.setupImageViewer(options: [.theme(.dark), .rightNavItemTitle("Download", onTap: { (Int) in
-                                   print("download")
+                                guard let image = cell.cellImageView.image else { return }
+                                UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+                                print("downloaded")
                                })], from: self)
             }
         }
