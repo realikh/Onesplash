@@ -11,6 +11,7 @@ class SearchViewController: UIViewController {
     
     let viewModel = SearchViewModel()
     let headerView = CustomSearchHeaderView()
+    let filtersVC = FiltersViewController()
     
     private var scopeButtonIndex = 0
     private var searchText = ""
@@ -122,13 +123,13 @@ class SearchViewController: UIViewController {
         navigationController?.navigationBar.barTintColor = UIColor(named: "DarkTheme")
         tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filters"),
                                                                               style: .plain,
-                                                                              target: self, action: #selector(lol))
+                                                                              target: self, action: #selector(presentFilters))
         tabBarController?.navigationItem.rightBarButtonItem?.tintColor = .white
         
     }
     
-    @objc func lol(){
-        print("lol")
+    @objc func presentFilters(){
+        present(filtersVC, animated: true, completion: nil)
     }
     
     @objc private func segmentedControlChanged(_ sender: UISegmentedControl) {
@@ -141,7 +142,7 @@ class SearchViewController: UIViewController {
             viewModel.fetchData(searchText: searchBar.text!, scopeButtonIndex: 0)
             tabBarController?.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "filters"),
                                                                                   style: .plain,
-                                                                                  target: self, action: #selector(lol))
+                                                                                  target: self, action: #selector(presentFilters))
             tabBarController?.navigationItem.rightBarButtonItem?.tintColor = .white
         case 1:
             viewModel.fetchData(searchText: searchBar.text!, scopeButtonIndex: 1)
@@ -221,7 +222,6 @@ extension SearchViewController: UITableViewDelegate {
             searchBar.endEditing(true)
         }
     }
-    
 }
 
 // MARK: Search Bar Delegate
